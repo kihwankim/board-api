@@ -12,7 +12,6 @@ dependencies {
     implementation 'io.micrometer:micrometer-registry-prometheus'
     implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
     compile("com.navercorp.lucy:lucy-xss-servlet:2.0.0")
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'mysql:mysql-connector-java'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
