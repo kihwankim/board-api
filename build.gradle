@@ -40,3 +40,9 @@ project(':app:main-service') {
         compile project(':app:common')
     }
 }
+
+project('app:core-module') {
+    dependencies {
+        compile project(':app:common')
+    }
+}
