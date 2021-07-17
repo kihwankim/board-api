@@ -1,4 +1,4 @@
-package com.cnu.spg.domain.login.validation;
+package com.cnu.spg.user.domain.validation;
 
 import org.springframework.beans.BeanWrapperImpl;
 

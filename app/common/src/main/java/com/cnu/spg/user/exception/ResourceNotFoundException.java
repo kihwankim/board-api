@@ -1,4 +1,4 @@
-package com.cnu.spg.exception;
+package com.cnu.spg.user.exception;
 
 import lombok.Getter;
 import lombok.Setter;

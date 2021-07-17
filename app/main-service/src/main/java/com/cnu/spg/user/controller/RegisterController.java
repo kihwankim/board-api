@@ -1,6 +1,6 @@
 package com.cnu.spg.user.controller;
 
-import com.cnu.spg.dto.user.UserRegisterDto;
+import com.cnu.spg.user.dto.UserRegisterDto;
 import com.cnu.spg.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

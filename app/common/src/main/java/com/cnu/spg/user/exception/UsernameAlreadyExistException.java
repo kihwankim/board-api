@@ -1,4 +1,4 @@
-package com.cnu.spg.exception;
+package com.cnu.spg.user.exception;
 
 public class UsernameAlreadyExistException extends RuntimeException {
     public UsernameAlreadyExistException(String username) {

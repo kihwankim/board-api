@@ -1,9 +1,9 @@
 package com.cnu.spg.user.controller;
 
-import com.cnu.spg.domain.login.User;
-import com.cnu.spg.domain.login.UserPrincipal;
-import com.cnu.spg.dto.user.UserInfoDto;
-import com.cnu.spg.dto.user.UserPasswordChangingDto;
+import com.cnu.spg.user.domain.User;
+import com.cnu.spg.user.domain.UserPrincipal;
+import com.cnu.spg.user.dto.UserInfoDto;
+import com.cnu.spg.user.dto.UserPasswordChangingDto;
 import com.cnu.spg.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

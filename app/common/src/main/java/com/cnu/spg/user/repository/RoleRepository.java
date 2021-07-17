@@ -1,7 +1,7 @@
-package com.cnu.spg.repository.user;
+package com.cnu.spg.user.repository;
 
-import com.cnu.spg.domain.login.Role;
-import com.cnu.spg.domain.login.RoleName;
+import com.cnu.spg.user.domain.Role;
+import com.cnu.spg.user.domain.RoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

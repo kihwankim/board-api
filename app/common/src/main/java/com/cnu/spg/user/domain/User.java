@@ -1,4 +1,4 @@
-package com.cnu.spg.domain.login;
+package com.cnu.spg.user.domain;
 
 import com.cnu.spg.domain.BaseEntity;
 import lombok.AccessLevel;

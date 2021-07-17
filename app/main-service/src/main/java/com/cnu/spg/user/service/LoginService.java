@@ -1,9 +1,9 @@
 package com.cnu.spg.user.service;
 
-import com.cnu.spg.exception.ResourceNotFoundException;
-import com.cnu.spg.domain.login.User;
-import com.cnu.spg.domain.login.UserPrincipal;
-import com.cnu.spg.repository.user.UserRepository;
+import com.cnu.spg.user.exception.ResourceNotFoundException;
+import com.cnu.spg.user.domain.User;
+import com.cnu.spg.user.domain.UserPrincipal;
+import com.cnu.spg.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

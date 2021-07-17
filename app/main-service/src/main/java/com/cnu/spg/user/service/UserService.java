@@ -1,14 +1,14 @@
 package com.cnu.spg.user.service;
 
-import com.cnu.spg.domain.login.Role;
-import com.cnu.spg.domain.login.RoleName;
-import com.cnu.spg.domain.login.User;
-import com.cnu.spg.dto.user.UserPasswordChangingDto;
-import com.cnu.spg.dto.user.UserRegisterDto;
-import com.cnu.spg.exception.ResourceNotFoundException;
-import com.cnu.spg.exception.UsernameAlreadyExistException;
-import com.cnu.spg.repository.user.RoleRepository;
-import com.cnu.spg.repository.user.UserRepository;
+import com.cnu.spg.user.domain.Role;
+import com.cnu.spg.user.domain.RoleName;
+import com.cnu.spg.user.domain.User;
+import com.cnu.spg.user.dto.UserPasswordChangingDto;
+import com.cnu.spg.user.dto.UserRegisterDto;
+import com.cnu.spg.user.exception.ResourceNotFoundException;
+import com.cnu.spg.user.exception.UsernameAlreadyExistException;
+import com.cnu.spg.user.repository.RoleRepository;
+import com.cnu.spg.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

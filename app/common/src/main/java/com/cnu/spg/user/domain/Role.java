@@ -1,7 +1,6 @@
-package com.cnu.spg.domain.login;
+package com.cnu.spg.user.domain;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;

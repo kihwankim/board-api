@@ -1,4 +1,4 @@
-package com.cnu.spg.domain.login.validation;
+package com.cnu.spg.user.domain.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

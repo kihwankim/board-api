@@ -1,4 +1,4 @@
-package com.cnu.spg.dto.user;
+package com.cnu.spg.user.dto;
 
 import lombok.Getter;
 import lombok.Setter;

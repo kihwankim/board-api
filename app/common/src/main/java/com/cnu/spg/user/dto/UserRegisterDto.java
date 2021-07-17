@@ -1,6 +1,6 @@
-package com.cnu.spg.dto.user;
+package com.cnu.spg.user.dto;
 
-import com.cnu.spg.domain.login.validation.FieldMatch;
+import com.cnu.spg.user.domain.validation.FieldMatch;
 import lombok.Getter;
 import lombok.Setter;
 
