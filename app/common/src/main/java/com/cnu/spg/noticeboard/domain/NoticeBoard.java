@@ -1,4 +1,4 @@
-package com.cnu.spg.domain.board;
+package com.cnu.spg.noticeboard.domain;
 
 import java.util.Calendar;
 import java.util.List;
@@ -16,8 +16,8 @@ import lombok.Setter;
 @Setter
 @Entity
 @DynamicInsert
-@Table(name = "free_board")
-public class FreeBoard {
+@Table(name = "notice_board")
+public class NoticeBoard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,17 +48,17 @@ public class FreeBoard {
     private Calendar createDate;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "free_board_id")
-    private List<FreeBoardFile> freeBoardFile;
+    @JoinColumn(name = "notice_board_id")
+    private List<NoticeBoardFile> noticeBoardFile;
     
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "content_id")
-    private List<FreeBoardComment> freeBoardComment;
+    private List<NoticeBoardComment> noticeBoardComment;
 
-    public FreeBoard() {
+    public NoticeBoard() {
     }
 
-    public FreeBoard(String title, long writerId, String writerName, String content) {
+    public NoticeBoard(String title, Long writerId, String writerName, String content) {
         this.title = title;
         this.writerId = writerId;
         this.writerName = writerName;

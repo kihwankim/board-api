@@ -1,11 +1,11 @@
 package com.cnu.spg.board.service;
 
-import com.cnu.spg.domain.board.NoticeBoard;
-import com.cnu.spg.domain.board.NoticeBoardComment;
-import com.cnu.spg.domain.board.NoticeBoardFile;
-import com.cnu.spg.domain.board.reposiroty.NoticeBoardRepository;
-import com.cnu.spg.domain.board.reposiroty.NoticeBoardCommentRepository;
-import com.cnu.spg.domain.board.reposiroty.NoticeBoardFileRepository;
+import com.cnu.spg.noticeboard.domain.NoticeBoard;
+import com.cnu.spg.noticeboard.domain.NoticeBoardComment;
+import com.cnu.spg.noticeboard.domain.NoticeBoardFile;
+import com.cnu.spg.noticeboard.repository.NoticeBoardRepository;
+import com.cnu.spg.noticeboard.repository.NoticeBoardCommentRepository;
+import com.cnu.spg.noticeboard.repository.NoticeBoardFileRepository;
 import com.cnu.spg.user.exception.ResourceNotFoundException;
 import com.cnu.spg.utils.FilePath;
 import org.springframework.beans.factory.annotation.Autowired;

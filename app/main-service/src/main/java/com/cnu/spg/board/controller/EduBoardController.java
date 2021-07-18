@@ -9,7 +9,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import com.cnu.spg.domain.board.EduBoardComment;
+import com.cnu.spg.eduboard.domain.EduBoardComment;
 import com.cnu.spg.board.service.EduBoardService;
 import com.cnu.spg.user.domain.User;
 import com.cnu.spg.utils.DateFormatter;
@@ -28,8 +28,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.cnu.spg.domain.board.EduBoard;
-import com.cnu.spg.domain.board.EduBoardFile;
+import com.cnu.spg.eduboard.domain.EduBoard;
+import com.cnu.spg.eduboard.domain.EduBoardFile;
 import com.cnu.spg.user.service.UserService;
 
 @Controller

@@ -1,11 +1,11 @@
 package com.cnu.spg.board.service;
 
-import com.cnu.spg.domain.board.reposiroty.FreeBoardFileRepository;
-import com.cnu.spg.domain.board.FreeBoard;
-import com.cnu.spg.domain.board.FreeBoardComment;
-import com.cnu.spg.domain.board.FreeBoardFile;
-import com.cnu.spg.domain.board.reposiroty.FreeBoardCommentRepositroy;
-import com.cnu.spg.domain.board.reposiroty.FreeBoardRepository;
+import com.cnu.spg.freeboard.repository.FreeBoardFileRepository;
+import com.cnu.spg.freeboard.domain.FreeBoard;
+import com.cnu.spg.freeboard.domain.FreeBoardComment;
+import com.cnu.spg.freeboard.domain.FreeBoardFile;
+import com.cnu.spg.freeboard.repository.FreeBoardCommentRepositroy;
+import com.cnu.spg.freeboard.repository.FreeBoardRepository;
 import com.cnu.spg.user.exception.ResourceNotFoundException;
 import com.cnu.spg.utils.FilePath;
 import org.springframework.beans.factory.annotation.Autowired;

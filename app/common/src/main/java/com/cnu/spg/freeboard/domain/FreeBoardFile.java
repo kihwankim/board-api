@@ -1,4 +1,4 @@
-package com.cnu.spg.domain.board;
+package com.cnu.spg.freeboard.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,8 +14,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "notice_board_file")
-public class NoticeBoardFile {
+@Table(name = "free_board_file")
+public class FreeBoardFile {
 
 	@Id
 	@NotBlank
@@ -29,15 +29,15 @@ public class NoticeBoardFile {
 	private String ordinaryFileName;
 
 	@NotNull
-	@Column(name = "notice_board_id")
-	private Long noticeBoardId;
+	@Column(name = "free_board_id")
+	private Long freeBoardId;
 	
-	public NoticeBoardFile() {}
+	public FreeBoardFile() {}
 	
-	public NoticeBoardFile(String storeFileName, String ordinaryFileName, Long noticeBoardId) {
+	public FreeBoardFile(String storeFileName, String ordinaryFileName, Long freeBoardId) {
 		this.storeFileName = storeFileName;
 		this.ordinaryFileName = ordinaryFileName;
-		this.noticeBoardId = noticeBoardId;
+		this.freeBoardId = freeBoardId;
 	}
 
 }
