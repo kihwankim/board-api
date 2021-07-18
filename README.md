@@ -30,6 +30,12 @@ LeeJiHyeong - https://easybrother0103.tistory.com/30
 ### Git flow
 - master merge 하기전에 무조건 dev branch로 merge
 - 기능 구현 branch 명 : `Feature/${function.name}`
+- git Flow 순서
+  - `Feature/${function.name}` : 개인 repo/메인 repo
+  - `dev
+      - 메인 repo
+      - code 리뷰 : 희망자만
+  - `master` : 메인 repo
 
 ## 추가 개발
 ### 기능 개선
