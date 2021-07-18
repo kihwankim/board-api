@@ -1,12 +1,12 @@
 package com.cnu.spg.admin.service;
 
 import com.cnu.spg.admin.reponse.ReponseUserData;
-import com.cnu.spg.domain.login.Role;
-import com.cnu.spg.domain.login.RoleName;
-import com.cnu.spg.domain.login.User;
-import com.cnu.spg.exception.ResourceNotFoundException;
-import com.cnu.spg.repository.user.RoleRepository;
-import com.cnu.spg.repository.user.UserRepository;
+import com.cnu.spg.user.domain.Role;
+import com.cnu.spg.user.domain.RoleName;
+import com.cnu.spg.user.domain.User;
+import com.cnu.spg.user.exception.ResourceNotFoundException;
+import com.cnu.spg.user.repository.RoleRepository;
+import com.cnu.spg.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

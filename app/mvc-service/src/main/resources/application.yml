@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: spg-club
+  profiles:
+    active: local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus, info
+  metrics:
+    tags:
+      application: ${spring.application.name}

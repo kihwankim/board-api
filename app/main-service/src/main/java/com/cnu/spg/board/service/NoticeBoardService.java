@@ -6,7 +6,7 @@ import com.cnu.spg.domain.board.NoticeBoardFile;
 import com.cnu.spg.domain.board.reposiroty.NoticeBoardRepository;
 import com.cnu.spg.domain.board.reposiroty.NoticeBoardCommentRepository;
 import com.cnu.spg.domain.board.reposiroty.NoticeBoardFileRepository;
-import com.cnu.spg.exception.ResourceNotFoundException;
+import com.cnu.spg.user.exception.ResourceNotFoundException;
 import com.cnu.spg.utils.FilePath;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -6,7 +6,7 @@ import com.cnu.spg.domain.board.FreeBoardComment;
 import com.cnu.spg.domain.board.FreeBoardFile;
 import com.cnu.spg.domain.board.reposiroty.FreeBoardCommentRepositroy;
 import com.cnu.spg.domain.board.reposiroty.FreeBoardRepository;
-import com.cnu.spg.exception.ResourceNotFoundException;
+import com.cnu.spg.user.exception.ResourceNotFoundException;
 import com.cnu.spg.utils.FilePath;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

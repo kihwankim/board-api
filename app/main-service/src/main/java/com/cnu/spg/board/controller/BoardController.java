@@ -4,7 +4,7 @@ import com.cnu.spg.domain.board.FreeBoard;
 import com.cnu.spg.domain.board.FreeBoardComment;
 import com.cnu.spg.domain.board.FreeBoardFile;
 import com.cnu.spg.board.service.FreeBoardService;
-import com.cnu.spg.domain.login.User;
+import com.cnu.spg.user.domain.User;
 import com.cnu.spg.user.service.UserService;
 import com.cnu.spg.utils.DateFormatter;
 import com.cnu.spg.utils.FilePath;

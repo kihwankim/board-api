@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -23,14 +23,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     UserAuthenticationSuccessHandler userAuthenticationSuccessHandler;
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(this.userDetailsService).passwordEncoder(this.bCryptPasswordEncoder());
+        auth.userDetailsService(this.userDetailsService).passwordEncoder(this.passwordEncoder);
     }
 
     @Bean
@@ -66,9 +64,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // auth
         http
                 .authorizeRequests()
-                .antMatchers("/")
+                .antMatchers("/", "/login/signInPage")
                 .permitAll()
                 .antMatchers("/register/**")
                 .permitAll()
@@ -76,28 +75,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAnyRole("ADMIN", "STUDENT")
                 .antMatchers("/admin/**")
                 .hasRole("ADMIN")
-                .anyRequest()
-                .authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login/signInPage")
-                .loginProcessingUrl("/authenticateTheUser")
-                .successHandler(this.userAuthenticationSuccessHandler)
-                .failureHandler((httpServletRequest, httpServletResponse, e) -> {
-                    httpServletRequest.setAttribute("username", httpServletRequest.getParameter("username"));
-                    httpServletRequest.getRequestDispatcher("/login/signInPage").forward(httpServletRequest, httpServletResponse);
-                })
-                .permitAll()
-                .and()
-                .logout()
-                .logoutSuccessUrl("/")
-//                .deleteCookies("JSESSIONID")
-//                .invalidateHttpSession(true)
-                .permitAll()
-                .and()
+                .anyRequest().authenticated();
+
+        // exception
+        http
                 .exceptionHandling()
                 .accessDeniedPage("/accessDenied");
 
+        // login
+        http
+                .formLogin()
+                .loginPage("/login/signInPage")
+                .loginProcessingUrl("/authenticateTheUser")
+                .successHandler(userAuthenticationSuccessHandler)
+                .failureHandler((httpServletRequest, httpServletResponse, e) -> {
+                    httpServletRequest.setAttribute("username", httpServletRequest.getParameter("username"));
+                    httpServletRequest.getRequestDispatcher("/login/signInPage").forward(httpServletRequest, httpServletResponse);
+                });
+
+        // logout
+        http
+                .logout()
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true);
+
+        // session
         http.sessionManagement()
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(false)
