@@ -25,12 +25,4 @@ public class LoginService implements UserDetailsService {
 
         return UserPrincipal.create(user);
     }
-
-    public UserDetails loadUserById(Long id) {
-        User user = this.userRepository.findById(id).orElseThrow( // get the id
-                () -> new ResourceNotFoundException("User", "id", id)
-        );
-
-        return UserPrincipal.create(user); // make user principal
-    }
 }

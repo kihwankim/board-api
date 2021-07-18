@@ -10,7 +10,7 @@ import com.cnu.spg.user.exception.UsernameAlreadyExistException;
 import com.cnu.spg.user.repository.RoleRepository;
 import com.cnu.spg.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +22,7 @@ import java.util.Collections;
 public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public boolean save(User user) {
@@ -30,7 +30,7 @@ public class UserService {
             return false;
         }
 
-        user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
         Role unAuthUserRole = this.roleRepository.findByName(RoleName.ROLE_UNAUTH)
                 .orElseThrow(() -> new ResourceNotFoundException("Role", "roleName", RoleName.ROLE_UNAUTH));
         user.setRoles(Collections.singleton(unAuthUserRole));
@@ -45,7 +45,7 @@ public class UserService {
             throw new UsernameAlreadyExistException(userRegisterDto.getUserName());
         }
 
-        String cryptPassword = bCryptPasswordEncoder.encode(userRegisterDto.getPassword());
+        String cryptPassword = passwordEncoder.encode(userRegisterDto.getPassword());
         Role unauthRole = roleRepository.findByName(RoleName.ROLE_UNAUTH)
                 .orElseThrow(() -> new ResourceNotFoundException("Role", "roleName", RoleName.ROLE_UNAUTH));
         User user = User.createUser(userRegisterDto.getName(), userRegisterDto.getUserName(), cryptPassword, unauthRole);
@@ -68,12 +68,12 @@ public class UserService {
     public User changeUserPassword(String username, UserPasswordChangingDto userPasswordChangingDto) {
         User oridinaryUser = this.userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
-        boolean isUserPasswordCorrect = this.bCryptPasswordEncoder.matches(userPasswordChangingDto.getBeforePassword()
+        boolean isUserPasswordCorrect = this.passwordEncoder.matches(userPasswordChangingDto.getBeforePassword()
                 , oridinaryUser.getPassword());
         if (!isUserPasswordCorrect) {
             return null;
         }
-        oridinaryUser.setPassword(this.bCryptPasswordEncoder.encode(userPasswordChangingDto.getPassword()));
+        oridinaryUser.setPassword(this.passwordEncoder.encode(userPasswordChangingDto.getPassword()));
 
         return oridinaryUser;
     }
@@ -82,7 +82,7 @@ public class UserService {
         User user = this.userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
 
-        return this.bCryptPasswordEncoder.matches(passowrd, user.getPassword());
+        return this.passwordEncoder.matches(passowrd, user.getPassword());
     }
 
     @Transactional
