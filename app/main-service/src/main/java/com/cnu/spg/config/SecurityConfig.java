@@ -66,6 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // auth
         http
                 .authorizeRequests()
                 .antMatchers("/")
@@ -76,28 +77,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAnyRole("ADMIN", "STUDENT")
                 .antMatchers("/admin/**")
                 .hasRole("ADMIN")
-                .anyRequest()
-                .authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login/signInPage")
-                .loginProcessingUrl("/authenticateTheUser")
-                .successHandler(this.userAuthenticationSuccessHandler)
-                .failureHandler((httpServletRequest, httpServletResponse, e) -> {
-                    httpServletRequest.setAttribute("username", httpServletRequest.getParameter("username"));
-                    httpServletRequest.getRequestDispatcher("/login/signInPage").forward(httpServletRequest, httpServletResponse);
-                })
-                .permitAll()
-                .and()
-                .logout()
-                .logoutSuccessUrl("/")
-//                .deleteCookies("JSESSIONID")
-//                .invalidateHttpSession(true)
-                .permitAll()
-                .and()
+                .anyRequest().authenticated();
+
+        // exception
+        http
                 .exceptionHandling()
                 .accessDeniedPage("/accessDenied");
 
+        // login
+        http
+                .formLogin()
+                .loginPage("/login/signInPage")
+                .loginProcessingUrl("/authenticateTheUser")
+                .successHandler(userAuthenticationSuccessHandler)
+                .failureHandler((httpServletRequest, httpServletResponse, e) -> {
+                    httpServletRequest.setAttribute("username", httpServletRequest.getParameter("username"));
+                    httpServletRequest.getRequestDispatcher("/login/signInPage").forward(httpServletRequest, httpServletResponse);
+                });
+
+        // logout
+        http
+                .logout()
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true);
+
+        // session
         http.sessionManagement()
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(false)
