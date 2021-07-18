@@ -1,7 +1,7 @@
 package com.cnu.spg.admin.reponse;
 
-import com.cnu.spg.domain.login.Role;
-import com.cnu.spg.domain.login.User;
+import com.cnu.spg.user.domain.Role;
+import com.cnu.spg.user.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.cnu.spg.domain.login.UserPrincipal;
+import com.cnu.spg.user.domain.UserPrincipal;
 
 @Controller
 @RequestMapping("/board")

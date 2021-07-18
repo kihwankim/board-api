@@ -1,10 +1,10 @@
 package com.cnu.spg.config.local;
 
-import com.cnu.spg.domain.login.Role;
-import com.cnu.spg.domain.login.RoleName;
-import com.cnu.spg.domain.login.User;
-import com.cnu.spg.repository.user.RoleRepository;
-import com.cnu.spg.repository.user.UserRepository;
+import com.cnu.spg.user.domain.Role;
+import com.cnu.spg.user.domain.RoleName;
+import com.cnu.spg.user.domain.User;
+import com.cnu.spg.user.repository.RoleRepository;
+import com.cnu.spg.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;

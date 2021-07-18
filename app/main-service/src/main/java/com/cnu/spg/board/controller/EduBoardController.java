@@ -11,7 +11,7 @@ import javax.validation.Valid;
 
 import com.cnu.spg.domain.board.EduBoardComment;
 import com.cnu.spg.board.service.EduBoardService;
-import com.cnu.spg.domain.login.User;
+import com.cnu.spg.user.domain.User;
 import com.cnu.spg.utils.DateFormatter;
 import com.cnu.spg.utils.FilePath;
 import com.cnu.spg.utils.PageVO;

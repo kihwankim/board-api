@@ -7,7 +7,7 @@ import com.cnu.spg.domain.board.EduBoardFile;
 import com.cnu.spg.domain.board.reposiroty.EduBoardCommentRepository;
 import com.cnu.spg.domain.board.reposiroty.EduBoardFileRepository;
 import com.cnu.spg.domain.board.reposiroty.EduBoardRepository;
-import com.cnu.spg.exception.ResourceNotFoundException;
+import com.cnu.spg.user.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

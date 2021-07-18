@@ -1,7 +1,7 @@
 package com.cnu.spg.user.handler;
 
-import com.cnu.spg.dto.user.UserRegisterDto;
-import com.cnu.spg.exception.UsernameAlreadyExistException;
+import com.cnu.spg.user.dto.UserRegisterDto;
+import com.cnu.spg.user.exception.UsernameAlreadyExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
