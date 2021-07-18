@@ -69,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // auth
         http
                 .authorizeRequests()
-                .antMatchers("/")
+                .antMatchers("/", "/login/signInPage")
                 .permitAll()
                 .antMatchers("/register/**")
                 .permitAll()
