@@ -23,10 +23,15 @@ LeeJiHyeong - https://easybrother0103.tistory.com/30
 현재 동아리 웹페이지에 공지사항과 같은 동아리의 개인적인 내용이 있기 때문에 승인된 계정으로 로그인하지 않으면 열람할 수 없습니다.
 회원가입을 하였을 경우 관리자(회장/부회장/총무/웹페이지 개발진)에게 학번/이름/학교/학년을 적어서 문자나 메일을 남겨주시면 승인하도록 하겠습니다.
 
-## 추가 개발
-### commit log 방식
+## Convention
+### Commit Log Convention
 - <a href="https://gist.github.com/stephenparish/9941e89d80e2bc58a153">AngularJS Commit Message Conventions</a> 참고해 commit log 작성
 
+### Git flow
+- master merge 하기전에 무조건 dev branch로 merge
+- 기능 구현 branch 명 : `Feature/${function.name}`
+
+## 추가 개발
 ### 기능 개선
 - [x] redis session 추가
 - [ ] multi module로 변경
