@@ -1,9 +1,9 @@
-package com.cnu.spg.domain.board.reposiroty;
+package com.cnu.spg.noticeboard.repository;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.cnu.spg.domain.board.NoticeBoardFile;
+import com.cnu.spg.noticeboard.domain.NoticeBoardFile;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface NoticeBoardFileRepository extends JpaRepository<NoticeBoardFile, String> {

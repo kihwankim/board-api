@@ -7,9 +7,9 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import com.cnu.spg.domain.board.NoticeBoard;
-import com.cnu.spg.domain.board.NoticeBoardComment;
-import com.cnu.spg.domain.board.NoticeBoardFile;
+import com.cnu.spg.noticeboard.domain.NoticeBoard;
+import com.cnu.spg.noticeboard.domain.NoticeBoardComment;
+import com.cnu.spg.noticeboard.domain.NoticeBoardFile;
 import com.cnu.spg.board.service.NoticeBoardService;
 import com.cnu.spg.utils.DateFormatter;
 import com.cnu.spg.utils.PageVO;

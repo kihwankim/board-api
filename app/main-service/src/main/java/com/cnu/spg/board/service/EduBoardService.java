@@ -1,12 +1,12 @@
 package com.cnu.spg.board.service;
 
 import com.cnu.spg.utils.FilePath;
-import com.cnu.spg.domain.board.EduBoard;
-import com.cnu.spg.domain.board.EduBoardComment;
-import com.cnu.spg.domain.board.EduBoardFile;
-import com.cnu.spg.domain.board.reposiroty.EduBoardCommentRepository;
-import com.cnu.spg.domain.board.reposiroty.EduBoardFileRepository;
-import com.cnu.spg.domain.board.reposiroty.EduBoardRepository;
+import com.cnu.spg.eduboard.domain.EduBoard;
+import com.cnu.spg.eduboard.domain.EduBoardComment;
+import com.cnu.spg.eduboard.domain.EduBoardFile;
+import com.cnu.spg.eduboard.repository.EduBoardCommentRepository;
+import com.cnu.spg.eduboard.repository.EduBoardFileRepository;
+import com.cnu.spg.eduboard.repository.EduBoardRepository;
 import com.cnu.spg.user.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -1,4 +1,4 @@
-package com.cnu.spg.domain.board;
+package com.cnu.spg.eduboard.domain;
 
 import java.util.Calendar;
 

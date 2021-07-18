@@ -1,9 +1,9 @@
-package com.cnu.spg.domain.board.reposiroty;
+package com.cnu.spg.eduboard.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.cnu.spg.domain.board.EduBoardComment;
+import com.cnu.spg.eduboard.domain.EduBoardComment;
 
 public interface EduBoardCommentRepository extends JpaRepository<EduBoardComment, Long>{
-	public int countByContentId(Long contentId);
+	int countByContentId(Long contentId);
 }

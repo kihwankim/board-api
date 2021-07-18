@@ -1,9 +1,9 @@
-package com.cnu.spg.domain.board.reposiroty;
+package com.cnu.spg.eduboard.repository;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.cnu.spg.domain.board.EduBoardFile;
+import com.cnu.spg.eduboard.domain.EduBoardFile;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EduBoardFileRepository extends JpaRepository<EduBoardFile, String> {
