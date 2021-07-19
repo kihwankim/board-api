@@ -1,8 +1,8 @@
 package com.cnu.spg.board.controller;
 
-import com.cnu.spg.domain.board.FreeBoard;
-import com.cnu.spg.domain.board.FreeBoardComment;
-import com.cnu.spg.domain.board.FreeBoardFile;
+import com.cnu.spg.freeboard.domain.FreeBoard;
+import com.cnu.spg.freeboard.domain.FreeBoardComment;
+import com.cnu.spg.freeboard.domain.FreeBoardFile;
 import com.cnu.spg.board.service.FreeBoardService;
 import com.cnu.spg.user.domain.User;
 import com.cnu.spg.user.service.UserService;

@@ -1,4 +1,4 @@
-package com.cnu.spg.domain.board;
+package com.cnu.spg.noticeboard.domain;
 
 import java.util.Calendar;
 
@@ -15,8 +15,8 @@ import lombok.Setter;
 @Setter
 @Entity
 @DynamicInsert
-@Table(name = "free_board_comment")
-public class FreeBoardComment {
+@Table(name = "notice_board_comment")
+public class NoticeBoardComment {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
