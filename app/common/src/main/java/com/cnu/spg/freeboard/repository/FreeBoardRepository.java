@@ -9,14 +9,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FreeBoardRepository extends JpaRepository<FreeBoard, Long> {
-
-	Optional<FreeBoard> findById(Long id);
+public interface FreeBoardRepository extends JpaRepository<FreeBoard, Long>, FreeBoardQuerydslRepository {
 
 	Page<FreeBoard> findByTitleContainingOrContentContaining(String titleKeyword, String contentKeyWord, Pageable pageable);
-	
-	Page<FreeBoard> findByWriterNameContaining(String keyWord, Pageable pageable);
-	
+
 	int countByTitleContainingOrContentContaining(String titleKeyword, String contentKeyword);
 	
 	int countByWriterNameContaining(String keyWord);

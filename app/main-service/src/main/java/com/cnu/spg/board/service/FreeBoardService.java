@@ -62,8 +62,7 @@ public class FreeBoardService {
     
     @Transactional
     public List<FreeBoard> findByWriterNameContaining(int startNum, String keyword) {
-        Pageable pageable = PageRequest.of(startNum, 10, Sort.by("id").descending());
-        return this.freeBoardRepository.findByWriterNameContaining(keyword, pageable).getContent();
+        return this.freeBoardRepository.findByWriterNameContaining(keyword, startNum, 10).getContent();
     }
 
     @Transactional
