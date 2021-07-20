@@ -26,10 +26,10 @@ public class FreeBoardQuerydslRepositoryImpl implements FreeBoardQuerydslReposit
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<FreeBoard> findByWriterNameContaining(String writerKeyword, int pageNo, int pageSize) {
+    public List<Long> findIdsByDynamicWriterNameWithPagination(String writerKeyword, int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
 
-        List<Long> ids = queryFactory
+        return queryFactory
                 .select(freeBoard.id)
                 .from(freeBoard)
                 .where(likeWriterName(writerKeyword))
@@ -37,10 +37,15 @@ public class FreeBoardQuerydslRepositoryImpl implements FreeBoardQuerydslReposit
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .fetch();
+    }
 
+    @Override
+    public Page<FreeBoard> findByIdsWithPagination(List<Long> ids, int pageNo, int pageSize) {
         if (CollectionUtils.isEmpty(ids)) {
             return new PageImpl<>(new ArrayList<>());
         }
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
 
         JPAQuery<FreeBoard> results = queryFactory
                 .selectFrom(freeBoard)
