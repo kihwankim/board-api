@@ -1,35 +1,32 @@
 package com.cnu.spg.board.service;
 
-import com.cnu.spg.freeboard.repository.FreeBoardFileRepository;
 import com.cnu.spg.freeboard.domain.FreeBoard;
 import com.cnu.spg.freeboard.domain.FreeBoardComment;
 import com.cnu.spg.freeboard.domain.FreeBoardFile;
 import com.cnu.spg.freeboard.repository.FreeBoardCommentRepositroy;
+import com.cnu.spg.freeboard.repository.FreeBoardFileRepository;
 import com.cnu.spg.freeboard.repository.FreeBoardRepository;
 import com.cnu.spg.user.exception.ResourceNotFoundException;
 import com.cnu.spg.utils.FilePath;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.io.File;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class FreeBoardService {
 
-    @Autowired
-    private FreeBoardRepository freeBoardRepository;
-
-    @Autowired
-    private FreeBoardFileRepository freeBoardFileRepository;
-    
-    @Autowired
-    private FreeBoardCommentRepositroy freeBoardCommentRepository;
+    private final FreeBoardRepository freeBoardRepository;
+    private final FreeBoardFileRepository freeBoardFileRepository;
+    private final FreeBoardCommentRepositroy freeBoardCommentRepository;
 
     @Transactional
     public FreeBoard save(FreeBoard freeBoard) {
@@ -37,41 +34,36 @@ public class FreeBoardService {
         return freeBoard;
     }
 
-    @Transactional
     public List<FreeBoard> findByPage(int startNum) {
-    	Pageable pageable = PageRequest.of(startNum, 10, Sort.by("id").descending());
-        Page<FreeBoard> page = this.freeBoardRepository.findAll(pageable);
+        List<Long> ids = freeBoardRepository.findIdsByDynamicWriterNameWithPagination(null, startNum, 10);
+        Page<FreeBoard> page = freeBoardRepository.findByIdsWithPagination(ids, startNum, 10);
+
         return page.getContent();
     }
 
-    @Transactional
     public int getTotalCount() {
         return (int) this.freeBoardRepository.count();
     }
 
-    @Transactional
     public List<FreeBoard> findByTitleContainingOrContentContaining(int startNum, String keyword) {
         Pageable pageable = PageRequest.of(startNum, 10, Sort.by("id").descending());
         return this.freeBoardRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable).getContent();
     }
 
-    @Transactional
     public int getCountByTitleContainingOrContentContaining(String keyword) {
         return this.freeBoardRepository.countByTitleContainingOrContentContaining(keyword, keyword);
     }
-    
-    @Transactional
+
     public List<FreeBoard> findByWriterNameContaining(int startNum, String keyword) {
-        Pageable pageable = PageRequest.of(startNum, 10, Sort.by("id").descending());
-        return this.freeBoardRepository.findByWriterNameContaining(keyword, pageable).getContent();
+        List<Long> ids = freeBoardRepository.findIdsByDynamicWriterNameWithPagination(keyword, startNum, 10);
+
+        return this.freeBoardRepository.findByIdsWithPagination(ids, startNum, 10).getContent();
     }
 
-    @Transactional
     public int getCountByWriterNameContaining(String keyword) {
         return this.freeBoardRepository.countByWriterNameContaining(keyword);
     }
 
-    @Transactional
     public FreeBoard getFreeBoardDetail(long freeBoardId) {
         FreeBoard freeBoard = this.freeBoardRepository.findById(freeBoardId)
                 .orElseThrow(() -> new ResourceNotFoundException("FreeBoard", "id", "it can not find free board data"));
@@ -119,22 +111,21 @@ public class FreeBoardService {
 
         return isDeleteError;
     }
-    
+
     // comment
     @Transactional
     public FreeBoardComment save(FreeBoardComment freeBoardComment) {
-    	this.freeBoardCommentRepository.save(freeBoardComment);
-    	return freeBoardComment;
+        this.freeBoardCommentRepository.save(freeBoardComment);
+        return freeBoardComment;
     }
-    
-    @Transactional
+
     public int getCommentCountByContentId(Long contentId) {
-    	return this.freeBoardCommentRepository.countByContentId(contentId);
+        return this.freeBoardCommentRepository.countByContentId(contentId);
     }
-    
+
     @Transactional
     public void deleteComment(Long commentId) {
-    	this.freeBoardCommentRepository.deleteById(commentId);
+        this.freeBoardCommentRepository.deleteById(commentId);
     }
-    
+
 }
