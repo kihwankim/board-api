@@ -1,16 +1,12 @@
 package com.cnu.spg.eduboard.domain;
 
-import java.util.Calendar;
-import java.util.List;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.DynamicInsert;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
+
+import javax.persistence.*;
+import java.util.Calendar;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,23 +20,16 @@ public class EduBoard {
     @Column(name = "id")
     private Long id;
 
-    @NotBlank
-    @Size(max = 40)
-    @Column(name = "title")
+    @Column(length = 40)
     private String title;
 
-    @Column(name = "writer_id")
     private Long writerId;
 
-    @NotBlank
-    @Size(max = 20)
-    @Column(name = "writer_name")
+    @Column(length = 20)
     private String writerName;
 
-    @Column(name = "number_of_hit")
     private short numberOfHit;
 
-    @NotBlank
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
@@ -50,7 +39,7 @@ public class EduBoard {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "edu_board_id")
     private List<EduBoardFile> eduBoardFile;
-    
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "content_id")
     private List<EduBoardComment> eduBoardComment;
