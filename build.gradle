@@ -42,6 +42,13 @@ project(':app:main-service') {
     }
 }
 
+project(':app:api-service') {
+    dependencies {
+        compile project(':app:common')
+        compile project(':app:core-module')
+    }
+}
+
 project('app:core-module') {
     dependencies {
         compile project(':app:common')
