@@ -1,5 +1,7 @@
 package com.cnu.spg.user.domain;
 
+import com.cnu.spg.board.domain.Board;
+import com.cnu.spg.board.domain.Comment;
 import com.cnu.spg.domain.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,10 +12,7 @@ import org.hibernate.annotations.NaturalId;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -45,6 +44,12 @@ public class User extends BaseEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Board> boards = new ArrayList<>();
 
     public void addRole(Role role) {
         roles.add(role);
