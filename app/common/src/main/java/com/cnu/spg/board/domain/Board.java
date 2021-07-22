@@ -39,12 +39,12 @@ public class Board extends BaseEntity {
     private User user;
 
     @Builder
-    private Board(User user, String title, Long writerId, String content) {
+    private Board(User user, String title, String content) {
         this.title = title;
-        this.writerId = writerId;
+        this.writerId = user.getId();
         this.writerName = user.getName();
         this.content = content;
-
+        this.user = user;
         this.user.getBoards().add(this);
     }
 }
