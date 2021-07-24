@@ -14,8 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -25,33 +23,18 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public boolean save(User user) {
-        if (this.userRepository.existsByUsername(user.getUsername())) {
-            return false;
-        }
-
-        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-        Role unAuthUserRole = this.roleRepository.findByName(RoleName.ROLE_UNAUTH)
-                .orElseThrow(() -> new ResourceNotFoundException("Role", "roleName", RoleName.ROLE_UNAUTH));
-        user.setRoles(Collections.singleton(unAuthUserRole));
-        User savedUser = this.userRepository.save(user);
-
-        return savedUser.getId() != null;
-    }
-
-    @Transactional
-    public Long signUp(UserRegisterDto userRegisterDto) {
+    public Long regiesterUser(UserRegisterDto userRegisterDto) {
         if (userRepository.existsByUsername(userRegisterDto.getUserName())) {
             throw new UsernameAlreadyExistException(userRegisterDto.getUserName());
         }
 
-        String cryptPassword = passwordEncoder.encode(userRegisterDto.getPassword());
-        Role unauthRole = roleRepository.findByName(RoleName.ROLE_UNAUTH)
+        Role unAuthUserRole = roleRepository.findByName(RoleName.ROLE_UNAUTH)
                 .orElseThrow(() -> new ResourceNotFoundException("Role", "roleName", RoleName.ROLE_UNAUTH));
-        User user = User.createUser(userRegisterDto.getName(), userRegisterDto.getUserName(), cryptPassword, unauthRole);
-        User savedUser = userRepository.save(user);
 
-        return savedUser.getId();
+        String encrytPassword = passwordEncoder.encode(userRegisterDto.getMatchingPassword());
+        User user = User.createUser(userRegisterDto.getName(), userRegisterDto.getUserName(), encrytPassword, unAuthUserRole);
+
+        return userRepository.save(user).getId();
     }
 
     public User findByUserName(String userName) {
