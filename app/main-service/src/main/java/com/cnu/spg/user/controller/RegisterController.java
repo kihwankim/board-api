@@ -34,7 +34,7 @@ public class RegisterController {
             return "register";
         }
 
-        Long createdUserId = userService.signUp(userRegisterDto);
+        Long createdUserId = userService.regiesterUser(userRegisterDto);
         log.info("Successfully created userId: " + createdUserId);
 
         return "redirect:/login/signInPage";
