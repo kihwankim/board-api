@@ -1,8 +1,7 @@
 package com.cnu.spg.user.dto;
 
 import com.cnu.spg.user.domain.validation.FieldMatch;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -10,8 +9,7 @@ import javax.validation.constraints.Size;
 @FieldMatch.List({
         @FieldMatch(first = "password", second = "matchingPassword", message = "The password fields must match")
 })
-@Getter
-@Setter
+@Data
 public class UserPasswordChangingDto {
     @NotNull(message = "is required")
     @Size(min = 1, message = "is required")
