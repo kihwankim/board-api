@@ -5,6 +5,7 @@ import com.cnu.spg.user.domain.RoleName;
 import com.cnu.spg.user.domain.User;
 import com.cnu.spg.user.dto.UserPasswordChangingDto;
 import com.cnu.spg.user.dto.UserRegisterDto;
+import com.cnu.spg.user.exception.PasswordNotMatchException;
 import com.cnu.spg.user.exception.ResourceNotFoundException;
 import com.cnu.spg.user.exception.UsernameAlreadyExistException;
 import com.cnu.spg.user.repository.RoleRepository;
@@ -56,9 +57,22 @@ public class UserService {
         if (!isUserPasswordCorrect) {
             return null;
         }
-        oridinaryUser.setPassword(this.passwordEncoder.encode(userPasswordChangingDto.getPassword()));
+        oridinaryUser.changePassword(this.passwordEncoder.encode(userPasswordChangingDto.getPassword()));
 
         return oridinaryUser;
+    }
+
+    @Transactional
+    public void changeUserPassword(Long userId, UserPasswordChangingDto userPasswordChangingDto) {
+        User oridinaryUser = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+
+        if (!passwordEncoder.matches(userPasswordChangingDto.getBeforePassword()
+                , oridinaryUser.getPassword())) {
+            throw new PasswordNotMatchException();
+        }
+
+        oridinaryUser.changePassword(this.passwordEncoder.encode(userPasswordChangingDto.getPassword()));
     }
 
     public boolean checkNowPassword(String username, String passowrd) {
@@ -72,8 +86,7 @@ public class UserService {
     public User updateUsernameAndName(String pastUserName, String username, String name) {
         User user = this.userRepository.findByUsername(pastUserName)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
-        user.setUsername(username);
-        user.setName(name);
+        user.changeName(name);
 
         return user;
     }

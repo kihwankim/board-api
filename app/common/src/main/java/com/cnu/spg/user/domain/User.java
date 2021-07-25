@@ -6,7 +6,6 @@ import com.cnu.spg.domain.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -15,7 +14,6 @@ import javax.validation.constraints.Size;
 import java.util.*;
 
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
@@ -59,6 +57,14 @@ public class User extends BaseEntity {
         this.name = name;
         this.username = username;
         this.password = password;
+    }
+
+    public void changePassword(String newEncryptPassword) {
+        this.password = newEncryptPassword;
+    }
+
+    public void changeName(String name) {
+        this.name = name;
     }
 
     public static User createUser(String name, String username, String password, Role... roles) {
