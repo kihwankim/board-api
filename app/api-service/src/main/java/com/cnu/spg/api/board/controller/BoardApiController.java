@@ -1,4 +1,4 @@
-package com.cnu.spg.api.controller;
+package com.cnu.spg.api.board.controller;
 
 import com.cnu.spg.board.dto.BoardDto;
 import com.cnu.spg.board.service.BoardService;
