@@ -5,6 +5,7 @@ import com.cnu.spg.user.domain.RoleName;
 import com.cnu.spg.user.domain.User;
 import com.cnu.spg.user.dto.UserPasswordChangingDto;
 import com.cnu.spg.user.dto.UserRegisterDto;
+import com.cnu.spg.user.dto.response.UserInfoResponseDto;
 import com.cnu.spg.user.exception.PasswordNotMatchException;
 import com.cnu.spg.user.exception.ResourceNotFoundException;
 import com.cnu.spg.user.exception.UsernameAlreadyExistException;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
@@ -73,6 +75,13 @@ public class UserService {
         }
 
         oridinaryUser.changePassword(this.passwordEncoder.encode(userPasswordChangingDto.getPassword()));
+    }
+
+    public UserInfoResponseDto searchUserInfo(Long userId) {
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(User.class, userId));
+
+        return new UserInfoResponseDto(findUser);
     }
 
     public boolean checkNowPassword(String username, String passowrd) {

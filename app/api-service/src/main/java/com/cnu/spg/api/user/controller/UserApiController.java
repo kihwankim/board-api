@@ -2,6 +2,7 @@ package com.cnu.spg.api.user.controller;
 
 import com.cnu.spg.user.dto.UserPasswordChangingDto;
 import com.cnu.spg.user.dto.UserRegisterDto;
+import com.cnu.spg.user.dto.response.UserInfoResponseDto;
 import com.cnu.spg.user.exception.PasswordConfirmException;
 import com.cnu.spg.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 
@@ -49,5 +51,10 @@ public class UserApiController {
         userService.changeUserPassword(userId, userPasswordChangingDto);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<UserInfoResponseDto> getMyProfile(@PathVariable("userId") Long userId) {
+        return ResponseEntity.ok(userService.searchUserInfo(userId));
     }
 }
