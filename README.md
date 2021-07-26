@@ -61,3 +61,9 @@ LeeJiHyeong - https://easybrother0103.tistory.com/30
 - [ ] 로그 적제 코드 추가
 - [ ] MSA 구조로 변경
 - [ ] Kafka 추가
+
+
+### 구현 과정
+1. main service module에서 api와 mvc project의 공통 요소를 module-core로 이전한다
+2. mvc에 최적화된 코드들(frontend 코드, mvc controller)를 mvc-module로 이전
+3. rest api을 추가 구현하여 api-module에 추가
