@@ -32,11 +32,11 @@ public class AdminService {
         User user = this.userRepository.getOne(userId);
         if (user.getUsername().equals(username)) {
             if (user.getRoles().contains(new Role(RoleName.ROLE_UNAUTH))) {
-                user.setActiveDate(Calendar.getInstance());
+//                user.setActiveDate(Calendar.getInstance());
             }
             Set<Role> newRoles = roles.stream().map(role -> this.roleRepository.findByName(role.getName())
                     .orElseThrow(() -> new ResourceNotFoundException("Role", "name", roles))).collect(Collectors.toSet());
-            user.setRoles(newRoles);
+//            user.setRoles(newRoles);
 
             this.userRepository.save(user);
 
