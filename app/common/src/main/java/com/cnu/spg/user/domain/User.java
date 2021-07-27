@@ -6,7 +6,6 @@ import com.cnu.spg.domain.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -18,20 +17,17 @@ import java.util.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @NaturalId
-    @Size(max = 10)
-    @Column(unique = true)
+    @Column(unique = true, length = 30, nullable = false)
     private String username;
 
-    @NotBlank
-    @Size(max = 70)
+    @Column(nullable = false, length = 70)
     private String password;
 
+    @Column(nullable = false, length = 20)
     private String name;
 
     private Calendar activeDate;
