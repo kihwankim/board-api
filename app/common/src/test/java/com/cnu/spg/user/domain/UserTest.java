@@ -38,6 +38,22 @@ class UserTest {
 
         // then
         assertEquals(newEncryptPassword, user.getPassword());
+    }
+
+    @Test
+    void changePasswordAndCheckPrevPassTest() {
+        // given
+        final String name = "kkh";
+        final String username = "kkh@gmail.com";
+        final String password = "password";
+        User user = User.createUser(name, username, password);
+
+        final String newEncryptPassword = "newpassword";
+
+        // when
+        user.changePassword(newEncryptPassword);
+
+        // then
         assertNotEquals(password, user.getPassword());
     }
 
@@ -56,6 +72,21 @@ class UserTest {
 
         // then
         assertEquals(newName, user.getName());
+    }
+
+    @Test
+    void checkPrevNameTest() {
+        final String name = "kkh";
+        final String username = "kkh@gmail.com";
+        final String password = "password";
+        User user = User.createUser(name, username, password);
+
+        final String newName = "newName";
+
+        // when
+        user.changeName(newName);
+
+        // then
         assertNotEquals(name, user.getName());
     }
 }
