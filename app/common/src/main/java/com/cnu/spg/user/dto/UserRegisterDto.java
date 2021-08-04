@@ -1,6 +1,7 @@
 package com.cnu.spg.user.dto;
 
 import com.cnu.spg.user.domain.validation.FieldMatch;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,5 +31,13 @@ public class UserRegisterDto {
     private String name;
 
     public UserRegisterDto() {
+    }
+
+    @Builder
+    public UserRegisterDto(String userName, String password, String matchingPassword, String name) {
+        this.userName = userName;
+        this.password = password;
+        this.matchingPassword = matchingPassword;
+        this.name = name;
     }
 }
