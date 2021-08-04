@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -59,6 +60,28 @@ class UserServiceTest {
     @Test
     @DisplayName("회원 가입")
     void regiesterUser() {
+        // givne
+        String newUsername = "newuser";
+        String userPassword = "password";
+        String newName = "name";
+        UserRegisterDto userRegisterDto = UserRegisterDto.builder()
+                .userName(newUsername)
+                .name(newName)
+                .password(userPassword)
+                .matchingPassword(userPassword)
+                .build();
+
+        // when
+        Long userId = userService.regiesterUser(userRegisterDto);
+        User user = userRepository.findById(userId)
+                .orElseThrow(IllegalArgumentException::new);
+
+        // then
+        assertEquals(newUsername, user.getUsername());
+        assertTrue(passwordEncoder.matches(userPassword, user.getPassword()));
+        assertEquals(newName, user.getName());
+        assertEquals(1, user.getRoles().size());
+        assertThat(user.getRoles()).extracting(Role::getName).containsExactly(RoleName.ROLE_UNAUTH);
     }
 
     @Test
