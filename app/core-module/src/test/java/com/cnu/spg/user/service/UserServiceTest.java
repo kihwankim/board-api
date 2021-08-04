@@ -58,7 +58,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원 가입")
+    @DisplayName("회원 가입 성공")
     void regiesterUser() {
         // givne
         String newUsername = "newuser";
@@ -103,6 +103,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("아이디로 회원 조회")
     void findByUserName() {
         // given
         String findUsername = existUsername;
@@ -117,7 +118,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("user 찾기 실패")
+    @DisplayName("잘못된 아이디로 회원 찾기 실패 테스트")
     void findFail_By_Username() throws Exception {
         // given
         String notExistUseranme = "notexist";
