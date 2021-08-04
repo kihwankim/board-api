@@ -4,6 +4,7 @@ import com.cnu.spg.user.domain.Role;
 import com.cnu.spg.user.domain.RoleName;
 import com.cnu.spg.user.domain.User;
 import com.cnu.spg.user.dto.UserRegisterDto;
+import com.cnu.spg.user.exception.ResourceNotFoundException;
 import com.cnu.spg.user.exception.UsernameAlreadyExistException;
 import com.cnu.spg.user.repository.RoleRepository;
 import com.cnu.spg.user.repository.UserRepository;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -29,6 +32,9 @@ class UserServiceTest {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    String existUsername = "john";
+    String existUserPassword = "fun123";
+
     @BeforeEach
     void setUp() {
         Role admin = new Role(RoleName.ROLE_ADMIN);
@@ -39,9 +45,9 @@ class UserServiceTest {
         roleRepository.save(student);
         roleRepository.save(unAuth);
 
-        String password = "fun123";
+        String password = existUserPassword;
 
-        User john = User.createUser("john", "john", passwordEncoder.encode(password), admin);
+        User john = User.createUser(existUsername, existUsername, passwordEncoder.encode(password), admin);
         User susan = User.createUser("susan", "susan", passwordEncoder.encode(password), unAuth);
         User amanda = User.createUser("amanda", "amanda", passwordEncoder.encode(password), admin, student);
 
@@ -59,7 +65,6 @@ class UserServiceTest {
     @DisplayName("이미 존재하는 username 입력시 에러 발생")
     void registerUserFail_For_ExistUsername() throws Exception {
         // given
-        String existUsername = "john";
         String password = "fun123";
 
         // when
@@ -76,6 +81,28 @@ class UserServiceTest {
 
     @Test
     void findByUserName() {
+        // given
+        String findUsername = existUsername;
+        String findPassowrd = existUserPassword;
+
+        // when
+        User findUser = userService.findByUserName(findUsername);
+
+        // then
+        assertEquals(findUsername, findUser.getUsername());
+        assertTrue(passwordEncoder.matches(findPassowrd, findUser.getPassword()));
+    }
+
+    @Test
+    @DisplayName("user 찾기 실패")
+    void findFail_By_Username() throws Exception {
+        // given
+        String notExistUseranme = "notexist";
+
+        // when
+
+        // then
+        assertThrows(ResourceNotFoundException.class, () -> userService.findByUserName(notExistUseranme));
     }
 
     @Test
