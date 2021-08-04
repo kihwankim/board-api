@@ -3,16 +3,15 @@ package com.cnu.spg.api.user.controller;
 import com.cnu.spg.user.dto.UserPasswordChangingDto;
 import com.cnu.spg.user.dto.UserRegisterDto;
 import com.cnu.spg.user.dto.response.UserInfoResponseDto;
-import com.cnu.spg.user.exception.PasswordConfirmException;
 import com.cnu.spg.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 
@@ -21,6 +20,8 @@ import java.net.URI;
 @RequestMapping("/user-service/v1")
 @RequiredArgsConstructor
 public class UserApiController {
+
+    private static final String PASSWORD_NOT_MATCHED_MSG = "password is not matched";
 
     private final UserService userService;
 
@@ -45,8 +46,7 @@ public class UserApiController {
                                                @RequestBody @Valid UserPasswordChangingDto userPasswordChangingDto,
                                                BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors())
-            throw new PasswordConfirmException("password is not matched");
+        if (bindingResult.hasErrors()) throw new BadCredentialsException(PASSWORD_NOT_MATCHED_MSG);
 
         userService.changeUserPassword(userId, userPasswordChangingDto);
 
