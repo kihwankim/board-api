@@ -10,9 +10,9 @@ import java.util.List;
 
 @Getter
 @Setter
-@Entity
+@Entity(name = "eduboard")
 @DynamicInsert
-@Table(name = "edu_board")
+@Table(name = "eduboard")
 public class EduBoard {
 
     @Id

@@ -13,8 +13,9 @@ import java.util.List;
 
 @Entity
 @Getter
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Board extends BaseEntity {
+public abstract class Board extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "board_id")
@@ -38,8 +39,7 @@ public class Board extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @Builder
-    private Board(User user, String title, String content) {
+    public Board(User user, String title, String content) {
         this.title = title;
         this.writerId = user.getId();
         this.writerName = user.getName();

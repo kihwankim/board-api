@@ -44,18 +44,18 @@ public class LocalConfig {
             User john = userRepository.findByUsername("john")
                     .orElseThrow(() -> new UsernameNotFoundException("not found"));
 
-            for (int index = 0; index < 30; index++) {
-                String titleWithNum = title + "_" + index;
-                String contentWithNum = content + "_" + index;
-
-                Board board = Board.builder()
-                        .user(john)
-                        .title(titleWithNum)
-                        .content(contentWithNum)
-                        .build();
-
-                boardRepository.save(board);
-            }
+//            for (int index = 0; index < 30; index++) {
+//                String titleWithNum = title + "_" + index;
+//                String contentWithNum = content + "_" + index;
+//
+//                Board board = Board.builder()
+//                        .user(john)
+//                        .title(titleWithNum)
+//                        .content(contentWithNum)
+//                        .build();
+//
+//                boardRepository.save(board);
+//            }
         }
     }
 
