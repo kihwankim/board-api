@@ -57,12 +57,12 @@ public class UserService {
 
     @Transactional
     public User changeUserPassword(String username, UserPasswordChangingDto userPasswordChangingDto) {
-        User oridinaryUser = this.userRepository.findByUsername(username)
+        User oridinaryUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
-        boolean isUserPasswordCorrect = this.passwordEncoder.matches(userPasswordChangingDto.getBeforePassword()
-                , oridinaryUser.getPassword());
-        if (!isUserPasswordCorrect) {
-            return null;
+
+        if (!passwordEncoder.matches(userPasswordChangingDto.getBeforePassword()
+                , oridinaryUser.getPassword())) {
+            throw new PasswordNotMatchException();
         }
         oridinaryUser.changePassword(this.passwordEncoder.encode(userPasswordChangingDto.getPassword()));
 

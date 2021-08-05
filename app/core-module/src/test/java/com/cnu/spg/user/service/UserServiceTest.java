@@ -3,7 +3,9 @@ package com.cnu.spg.user.service;
 import com.cnu.spg.user.domain.Role;
 import com.cnu.spg.user.domain.RoleName;
 import com.cnu.spg.user.domain.User;
+import com.cnu.spg.user.dto.UserPasswordChangingDto;
 import com.cnu.spg.user.dto.UserRegisterDto;
+import com.cnu.spg.user.exception.PasswordNotMatchException;
 import com.cnu.spg.user.exception.ResourceNotFoundException;
 import com.cnu.spg.user.exception.UsernameAlreadyExistException;
 import com.cnu.spg.user.repository.RoleRepository;
@@ -158,7 +160,59 @@ class UserServiceTest {
     }
 
     @Test
-    void changeUserPassword() {
+    @DisplayName("회원 변경 정상 작동")
+    void changeUserPassword_Test() {
+        // given
+        String existUsername = this.existUsername;
+        String existPassword = this.existUserPassword;
+
+        String newPassword = "newpassword";
+        String newPasswordMatching = "newpassword";
+
+        UserPasswordChangingDto passwordChangingDto = new UserPasswordChangingDto(existPassword, newPassword, newPasswordMatching);
+
+        // when
+        User user = userService.changeUserPassword(existUsername, passwordChangingDto);
+
+        // then
+        assertTrue(passwordEncoder.matches(newPassword, user.getPassword()));
+        assertEquals(newPassword, newPasswordMatching);
+        assertEquals(existUsername, user.getUsername());
+    }
+
+    @Test
+    @DisplayName("이전 password가 일치 하지 않을 경우 에러 발생")
+    void failChangin_Cuz_Not_Matched_PrevisouPassword_Test() throws Exception {
+        // given
+        String existUsername = this.existUsername;
+        String notMatchedPassword = "notMatchedPassword";
+
+        String newPassword = "newpassword";
+        String newPasswordMatching = "newpassword";
+
+        UserPasswordChangingDto passwordChangingDto = new UserPasswordChangingDto(notMatchedPassword, newPassword, newPasswordMatching);
+
+        // when
+
+        // then
+        assertThrows(PasswordNotMatchException.class, () -> userService.changeUserPassword(existUsername, passwordChangingDto));
+    }
+
+    @Test
+    void failChanging_User_IsNot_Exist_Test() throws Exception {
+        // given
+        String existUsername = "notExistuseranme";
+        String existPassword = this.existUserPassword;
+
+        String newPassword = "newpassword";
+        String newPasswordMatching = "newpassword";
+
+        UserPasswordChangingDto passwordChangingDto = new UserPasswordChangingDto(existPassword, newPassword, newPasswordMatching);
+
+        // when
+
+        // then
+        assertThrows(UsernameNotFoundException.class, () -> userService.changeUserPassword(existUsername, passwordChangingDto));
     }
 
     @Test

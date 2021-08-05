@@ -1,6 +1,7 @@
 package com.cnu.spg.user.dto;
 
 import com.cnu.spg.user.domain.validation.FieldMatch;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -24,5 +25,12 @@ public class UserPasswordChangingDto {
     private String matchingPassword;
 
     public UserPasswordChangingDto() {
+    }
+
+    @Builder
+    public UserPasswordChangingDto(String beforePassword, String password, String matchingPassword) {
+        this.beforePassword = beforePassword;
+        this.password = password;
+        this.matchingPassword = matchingPassword;
     }
 }
