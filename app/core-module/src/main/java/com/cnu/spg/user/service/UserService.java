@@ -12,6 +12,7 @@ import com.cnu.spg.user.exception.UsernameAlreadyExistException;
 import com.cnu.spg.user.repository.RoleRepository;
 import com.cnu.spg.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,18 +47,22 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteByUserName(String username) {
-        this.userRepository.deleteByUsername(username);
+    public void withdrawMemberShip(String username) {
+        if (!userRepository.existsByUsername(username)) {
+            throw new UsernameNotFoundException(username);
+        }
+
+        userRepository.deleteByUsername(username);
     }
 
     @Transactional
     public User changeUserPassword(String username, UserPasswordChangingDto userPasswordChangingDto) {
-        User oridinaryUser = this.userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
-        boolean isUserPasswordCorrect = this.passwordEncoder.matches(userPasswordChangingDto.getBeforePassword()
-                , oridinaryUser.getPassword());
-        if (!isUserPasswordCorrect) {
-            return null;
+        User oridinaryUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
+
+        if (!passwordEncoder.matches(userPasswordChangingDto.getBeforePassword()
+                , oridinaryUser.getPassword())) {
+            throw new PasswordNotMatchException();
         }
         oridinaryUser.changePassword(this.passwordEncoder.encode(userPasswordChangingDto.getPassword()));
 
