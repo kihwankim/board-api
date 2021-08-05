@@ -45,7 +45,7 @@ public class UserController {
         boolean checkNowUserPassword = this.userService.checkNowPassword(userName, password);
 
         if (checkNowUserPassword) {
-            this.userService.deleteByUserName(userName); // delete user
+            this.userService.withdrawMemberShip(userName); // delete user
             response.setContentType("text/html; charset=UTF-8");
             PrintWriter out = response.getWriter();
             out.println("<script>alert('회원 탈퇴가 완료되었습니다.');</script>");

@@ -47,8 +47,12 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteByUserName(String username) {
-        this.userRepository.deleteByUsername(username);
+    public void withdrawMemberShip(String username) {
+        if (!userRepository.existsByUsername(username)) {
+            throw new UsernameNotFoundException(username);
+        }
+
+        userRepository.deleteByUsername(username);
     }
 
     @Transactional
