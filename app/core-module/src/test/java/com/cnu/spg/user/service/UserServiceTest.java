@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -130,7 +131,30 @@ class UserServiceTest {
     }
 
     @Test
-    void deleteByUserName() {
+    @DisplayName("user 이름으로 사용자 제거")
+    void delete_Exist_Username_Test() {
+        // given
+        String existUsername = this.existUsername;
+
+        // when
+        userService.withdrawMemberShip(existUsername);
+
+        // then
+        assertThrows(ResourceNotFoundException.class,
+                () -> userService.findByUserName(existUsername));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 user 회원 탈퇴 요청")
+    void delete_NotExist_User_Test() throws Exception {
+        // given
+        String notExistUsername = "notexist";
+
+        // when
+
+        // then
+        assertThrows(UsernameNotFoundException.class,
+                () -> userService.withdrawMemberShip(notExistUsername));
     }
 
     @Test
