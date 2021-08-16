@@ -1,6 +1,6 @@
 package com.cnu.spg.admin.service;
 
-import com.cnu.spg.admin.reponse.ReponseUserData;
+import com.cnu.spg.admin.dto.response.AdminUserDataResponse;
 import com.cnu.spg.user.domain.Role;
 import com.cnu.spg.user.domain.RoleName;
 import com.cnu.spg.user.domain.User;
@@ -15,7 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,12 +46,12 @@ public class AdminService {
     }
 
     @Transactional
-    public List<ReponseUserData> findUsersByPage(int startPageIndex) {
+    public List<AdminUserDataResponse> findUsersByPage(int startPageIndex) {
         Pageable pageable = PageRequest.of(startPageIndex, 10, Sort.by(Sort.Direction.DESC, "id"));
         Page<User> userPage = this.userRepository.findAll(pageable);
         List<User> userList = userPage.getContent();
 
-        return userList.stream().map(ReponseUserData::new).collect(Collectors.toList());
+        return userList.stream().map(AdminUserDataResponse::new).collect(Collectors.toList());
     }
 
     @Transactional
