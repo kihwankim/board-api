@@ -44,23 +44,3 @@ subprojects {
         }
     }
 }
-
-project(':app:main-service') {
-    dependencies {
-        implementation project(':app:common')
-        implementation project(':app:core-module')
-    }
-}
-
-project(':app:api-service') {
-    dependencies {
-        implementation project(':app:common')
-        implementation project(':app:core-module')
-    }
-}
-
-project('app:core-module') {
-    dependencies {
-        implementation project(':app:common')
-    }
-}
