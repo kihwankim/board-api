@@ -1,5 +1,6 @@
 package com.cnu.spg.noticeboard.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -48,10 +49,15 @@ public class NoticeBoard {
     public NoticeBoard() {
     }
 
+    @Builder
     public NoticeBoard(String title, Long writerId, String writerName, String content) {
         this.title = title;
         this.writerId = writerId;
         this.writerName = writerName;
         this.content = content;
+    }
+
+    public void watchSomeoneThisBoard() {
+        this.numberOfHit += 1;
     }
 }

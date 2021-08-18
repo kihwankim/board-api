@@ -11,7 +11,7 @@ spring:
   jpa:
     database: mysql
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     properties:
       format: true
       hibernate:
