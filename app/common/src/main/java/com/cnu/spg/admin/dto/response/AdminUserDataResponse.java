@@ -1,4 +1,4 @@
-package com.cnu.spg.admin.reponse;
+package com.cnu.spg.admin.dto.response;
 
 import com.cnu.spg.user.domain.Role;
 import com.cnu.spg.user.domain.User;
@@ -9,13 +9,13 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class ReponseUserData {
+public class AdminUserDataResponse {
     private Long id;
     private String username;
     private String name;
     private Set<Role> roles;
 
-    public ReponseUserData(User user) {
+    public AdminUserDataResponse(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.name = user.getName();

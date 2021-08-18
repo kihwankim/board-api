@@ -1,7 +1,7 @@
 package com.cnu.spg.admin.controller;
 
-import com.cnu.spg.admin.reponse.ReponseUserData;
-import com.cnu.spg.admin.request.RequestModifyUserRole;
+import com.cnu.spg.admin.dto.response.AdminUserDataResponse;
+import com.cnu.spg.admin.dto.request.AdminUserRoleModifyRequest;
 import com.cnu.spg.admin.service.AdminService;
 import com.cnu.spg.noticeboard.domain.NoticeBoard;
 import com.cnu.spg.noticeboard.domain.NoticeBoardFile;
@@ -62,19 +62,19 @@ public class AdminController {
     }
 
     @PostMapping("/doModifyUserRole")
-    public String doModifyUserUserRole(@Valid @ModelAttribute("requestModifyUserRole") RequestModifyUserRole requestModifyUserRole) {
+    public String doModifyUserUserRole(@Valid @ModelAttribute("requestModifyUserRole") AdminUserRoleModifyRequest adminUserRoleModifyRequest) {
 
         Set<Role> roles = new HashSet<>();
 
         try {
-            for (String roleStr : requestModifyUserRole.getRoles()) {
+            for (String roleStr : adminUserRoleModifyRequest.getRoles()) {
                 roles.add(new Role(RoleName.valueOf(roleStr)));
             }
         } catch (Exception e) {
             return "redirect:/admin/goModifyUserDataPage"; // fail
         }
 
-        if (this.adminService.changeUserAuthenticated(Long.parseLong(requestModifyUserRole.getId()), requestModifyUserRole.getUsername(), roles)) {
+        if (this.adminService.changeUserAuthenticated(Long.parseLong(adminUserRoleModifyRequest.getId()), adminUserRoleModifyRequest.getUsername(), roles)) {
             return "redirect:/admin/goModifyUserDataPage"; // change well
         }
 
@@ -83,10 +83,10 @@ public class AdminController {
     }
 
     @PostMapping("/doDeleteUser")
-    public String doDeleteUser(@Valid @ModelAttribute("requestModifyUserRole") RequestModifyUserRole requestModifyUserRole) {
+    public String doDeleteUser(@Valid @ModelAttribute("requestModifyUserRole") AdminUserRoleModifyRequest adminUserRoleModifyRequest) {
 
-        Long userId = Long.parseLong(requestModifyUserRole.getId());
-        String username = requestModifyUserRole.getUsername();
+        Long userId = Long.parseLong(adminUserRoleModifyRequest.getId());
+        String username = adminUserRoleModifyRequest.getUsername();
 
         if (this.adminService.deleteUserData(userId, username)) {
             return "redirect:/admin/goModifyUserDataPage"; // delete success
@@ -105,7 +105,7 @@ public class AdminController {
         }
 
         PageVO pageInfo = new PageVO();
-        List<ReponseUserData> userList = this.adminService.findUsersByPage(pageNumber - 1);
+        List<AdminUserDataResponse> userList = this.adminService.findUsersByPage(pageNumber - 1);
         long totalCount = this.adminService.getTotalCount();
 
         List<Role> temp = Arrays.stream(RoleName.values()).map(Role::new).collect(Collectors.toList());

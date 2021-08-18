@@ -59,7 +59,7 @@
                         </thead>
                         <tbody>
                         <th:block th:each="page : ${users}">
-                        <form th:object="${requestModifyUserRole}" th:id="${page.getId()}" method="POST">                        
+                        <form th:object="${adminUserRoleModifyRequest}" th:id="${page.getId()}" method="POST">
                         	<input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
                             <tr>
                                     <!--No-->

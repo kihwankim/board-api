@@ -14,6 +14,7 @@ buildscript {
 allprojects {
     repositories {
         mavenCentral()
+        jcenter()
     }
 }
 
@@ -41,25 +42,5 @@ subprojects {
         testLogging {
             events "passed", "skipped", "failed"
         }
-    }
-}
-
-project(':app:main-service') {
-    dependencies {
-        implementation project(':app:common')
-        implementation project(':app:core-module')
-    }
-}
-
-project(':app:api-service') {
-    dependencies {
-        implementation project(':app:common')
-        implementation project(':app:core-module')
-    }
-}
-
-project('app:core-module') {
-    dependencies {
-        implementation project(':app:common')
     }
 }
