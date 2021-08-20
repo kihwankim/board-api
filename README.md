@@ -1,5 +1,6 @@
-# spg
-충남대학교 컴퓨터융합학부 학술동아리 SPG 홈페이지 
+# Board Project [![Build Status](https://app.travis-ci.com/studentclubs/board-api.svg?branch=master)](https://app.travis-ci.com/studentclubs/board-api)
+
+충남대학교 컴퓨터융합학부 학술동아리 SPG 홈페이지에서 시작해서 다른 기능을 구현 하고 있습니다
 (www.cnu-spg.com)
 
 서비스 운영중입니다. 19.09.04 ~ 21.02.08
