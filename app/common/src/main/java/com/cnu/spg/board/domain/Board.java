@@ -32,6 +32,9 @@ public abstract class Board extends BaseEntity {
     @Lob
     private String content;
 
+    @Version
+    private Long version;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "board")
     private List<Comment> comments = new ArrayList<>();
 
