@@ -1,6 +1,7 @@
 package com.cnu.spg.board.repository;
 
 import com.cnu.spg.board.domain.Board;
+import com.cnu.spg.board.dto.BoardSearchCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -23,8 +24,12 @@ import static com.cnu.spg.board.domain.QBoard.board;
 public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     private final JPAQueryFactory queryFactory;
 
-    private BooleanExpression likeContent(String content) {
-        return content == null ? null : board.content.like(content);
+    private BooleanExpression likeContent(String partOfContent) {
+        return partOfContent == null ? null : board.content.contains(partOfContent);
+    }
+
+    private BooleanExpression likeTitle(String partOfTitle) {
+        return partOfTitle == null ? null : board.title.contains(partOfTitle);
     }
 
     private BooleanExpression eqWriterName(String writerName) {
@@ -33,13 +38,14 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
 
 
     @Override
-    public List<Long> findIdsFromPaginationWithKeyword(String witerName, String content, Pageable pageable) {
+    public List<Long> findIdsFromPaginationWithKeyword(BoardSearchCondition boardSearchCondition, Pageable pageable) {
         return queryFactory
                 .select(board.id)
                 .from(board)
                 .where(
-                        eqWriterName(witerName),
-                        likeContent(content)
+                        eqWriterName(boardSearchCondition.getWriterName()),
+                        likeContent(boardSearchCondition.getContentPart()),
+                        likeTitle(boardSearchCondition.getTitlePart())
                 )
                 .orderBy(board.id.desc())
                 .limit(pageable.getPageSize())
@@ -48,20 +54,27 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     }
 
     @Override
-    public Page<Board> findPageDataFromBoardByIds(List<Long> ids, Pageable pageable) {
+    public Page<Board> findPageDataFromBoardByIds(List<Long> ids, BoardSearchCondition boardSearchCondition, Pageable pageable) {
         if (CollectionUtils.isEmpty(ids)) {
             return new PageImpl<>(new ArrayList<>());
         }
 
-        JPAQuery<Board> results = queryFactory
+        List<Board> content = queryFactory
                 .selectFrom(board)
-                .where(board.id.in(ids));
-
-        List<Board> content = results.fetch()
+                .where(board.id.in(ids))
+                .fetch()
                 .stream()
                 .sorted((first, second) -> (int) (-first.getId() + second.getId()))
                 .collect(Collectors.toList());
 
-        return PageableExecutionUtils.getPage(content, pageable, results::fetchCount);
+        JPAQuery<Board> countQuery = queryFactory
+                .selectFrom(board)
+                .where(
+                        eqWriterName(boardSearchCondition.getWriterName()),
+                        likeContent(boardSearchCondition.getContentPart()),
+                        likeTitle(boardSearchCondition.getTitlePart())
+                );
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
     }
 }

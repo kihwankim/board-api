@@ -3,7 +3,6 @@ package com.cnu.spg.board.domain;
 import com.cnu.spg.domain.BaseEntity;
 import com.cnu.spg.user.domain.User;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,8 +12,9 @@ import java.util.List;
 
 @Entity
 @Getter
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Board extends BaseEntity {
+public abstract class Board extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "board_id")
@@ -31,6 +31,9 @@ public class Board extends BaseEntity {
     @Lob
     private String content;
 
+    @Version
+    private Long version;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "board")
     private List<Comment> comments = new ArrayList<>();
 
@@ -38,8 +41,7 @@ public class Board extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @Builder
-    private Board(User user, String title, String content) {
+    public Board(User user, String title, String content) {
         this.title = title;
         this.writerId = user.getId();
         this.writerName = user.getName();

@@ -1,6 +1,7 @@
 package com.cnu.spg.config.local;
 
 import com.cnu.spg.board.domain.Board;
+import com.cnu.spg.board.domain.EduBoard;
 import com.cnu.spg.board.repository.BoardRepository;
 import com.cnu.spg.user.domain.Role;
 import com.cnu.spg.user.domain.RoleName;
@@ -48,7 +49,7 @@ public class LocalConfig {
                 String titleWithNum = title + "_" + index;
                 String contentWithNum = content + "_" + index;
 
-                Board board = Board.builder()
+                Board board = EduBoard.builder()
                         .user(john)
                         .title(titleWithNum)
                         .content(contentWithNum)

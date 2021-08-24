@@ -1,6 +1,6 @@
 package com.cnu.spg.eduboard.repository;
 
-import com.cnu.spg.eduboard.domain.EduBoard;
+import com.cnu.spg.board.domain.EduBoard;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
