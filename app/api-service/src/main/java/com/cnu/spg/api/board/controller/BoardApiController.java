@@ -5,6 +5,7 @@ import com.cnu.spg.board.dto.BoardSearchCondition;
 import com.cnu.spg.board.dto.request.BoardsRequset;
 import com.cnu.spg.board.service.BoardService;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,11 @@ public class BoardApiController {
     private final BoardService boardService;
 
     @ApiOperation("전체 게시판 정보를 제공")
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header"),
+            @ApiImplicitParam(name = "pageNum", value = "page number of pagination", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "elementSize", value = "each page element number", required = true, paramType = "query")
+    })
     @GetMapping("/api/board-service/v1/boards")
     public ResponseEntity<Page<BoardDto>> getBoards(@Valid BoardsRequset boardsRequset) {
         Pageable pageable = PageRequest.of(boardsRequset.getPageNum(), boardsRequset.getElementSize());
