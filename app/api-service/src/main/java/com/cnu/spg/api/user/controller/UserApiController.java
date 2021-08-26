@@ -4,6 +4,8 @@ import com.cnu.spg.user.dto.UserPasswordChangingDto;
 import com.cnu.spg.user.dto.UserRegisterDto;
 import com.cnu.spg.user.dto.response.UserInfoResponseDto;
 import com.cnu.spg.user.service.UserService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,6 @@ import java.net.URI;
 
 @Slf4j
 @RestController
-@RequestMapping("/user-service/v1")
 @RequiredArgsConstructor
 public class UserApiController {
 
@@ -25,13 +26,15 @@ public class UserApiController {
 
     private final UserService userService;
 
-    @GetMapping("/health-check")
+    @ApiOperation("health check용도로 사용")
+    @GetMapping("/user-service/v1/health-check")
     public String checkAlive() {
         return "alive";
     }
 
-    @PostMapping("/users")
-    public ResponseEntity<URI> register(@RequestBody UserRegisterDto userRegisterDto) {
+    @ApiOperation("회원가입 요청")
+    @PostMapping("/user-service/v1/users")
+    public ResponseEntity<URI> register(@Valid @RequestBody UserRegisterDto userRegisterDto) {
 
         URI createUri = ServletUriComponentsBuilder
                 .fromCurrentRequestUri().path("/{id}")
@@ -41,7 +44,9 @@ public class UserApiController {
         return ResponseEntity.created(createUri).build();
     }
 
-    @PutMapping("/users/{userId}/password")
+    @ApiOperation("비밀 번호 변경")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @PutMapping("/user-service/v1/users/{userId}/password")
     public ResponseEntity<Void> changePassword(@PathVariable("userId") Long userId,
                                                @RequestBody @Valid UserPasswordChangingDto userPasswordChangingDto,
                                                BindingResult bindingResult) {
@@ -53,7 +58,9 @@ public class UserApiController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/users/{userId}")
+    @ApiOperation("회원 정보 조회")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @GetMapping("/user-service/v1/users/{userId}")
     public ResponseEntity<UserInfoResponseDto> getMyProfile(@PathVariable("userId") Long userId) {
         return ResponseEntity.ok(userService.searchUserInfo(userId));
     }
