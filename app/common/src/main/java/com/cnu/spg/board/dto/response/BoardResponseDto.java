@@ -1,4 +1,4 @@
-package com.cnu.spg.board.dto;
+package com.cnu.spg.board.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class BoardDto {
+public class BoardResponseDto {
     private Long id;
 
     private String title;

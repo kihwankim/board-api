@@ -1,7 +1,7 @@
 package com.cnu.spg.api.board.controller;
 
-import com.cnu.spg.board.dto.BoardDto;
-import com.cnu.spg.board.dto.BoardSearchCondition;
+import com.cnu.spg.board.dto.response.BoardResponseDto;
+import com.cnu.spg.board.dto.request.BoardSearchConditionRequest;
 import com.cnu.spg.board.dto.request.BoardsRequset;
 import com.cnu.spg.board.service.BoardService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -32,10 +32,10 @@ public class BoardApiController {
             @ApiImplicitParam(name = "elementSize", value = "each page element number", required = true, paramType = "query")
     })
     @GetMapping("/api/board-service/v1/boards")
-    public ResponseEntity<Page<BoardDto>> getBoards(@Valid BoardsRequset boardsRequset) {
+    public ResponseEntity<Page<BoardResponseDto>> getBoards(@Valid BoardsRequset boardsRequset) {
         Pageable pageable = PageRequest.of(boardsRequset.getPageNum(), boardsRequset.getElementSize());
-        BoardSearchCondition boardSearchCondition = new BoardSearchCondition(boardsRequset.getPartTitle(), boardsRequset.getWriterName(), boardsRequset.getPartOfContent());
+        BoardSearchConditionRequest boardSearchConditionRequest = new BoardSearchConditionRequest(boardsRequset.getPartTitle(), boardsRequset.getWriterName(), boardsRequset.getPartOfContent());
 
-        return ResponseEntity.ok().body(boardService.findBoardsOnePage(boardSearchCondition, pageable));
+        return ResponseEntity.ok().body(boardService.findBoardsOnePage(boardSearchConditionRequest, pageable));
     }
 }

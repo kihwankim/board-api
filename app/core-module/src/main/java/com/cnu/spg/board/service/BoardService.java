@@ -1,9 +1,9 @@
 package com.cnu.spg.board.service;
 
 import com.cnu.spg.board.domain.Board;
-import com.cnu.spg.board.dto.BoardDto;
-import com.cnu.spg.board.dto.BoardSearchCondition;
-import com.cnu.spg.board.dto.CommentCountsWithBoardIdDto;
+import com.cnu.spg.board.dto.response.BoardResponseDto;
+import com.cnu.spg.board.dto.request.BoardSearchConditionRequest;
+import com.cnu.spg.board.dto.response.CommentCountsWithBoardIdResponseDto;
 import com.cnu.spg.board.repository.BoardRepository;
 import com.cnu.spg.board.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,17 +27,17 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
 
-    public Page<BoardDto> findBoardsOnePage(BoardSearchCondition boardSearchCondition, Pageable pageable) {
-        List<Long> ids = boardRepository.findIdsFromPaginationWithKeyword(boardSearchCondition, pageable);
-        List<CommentCountsWithBoardIdDto> countListAndBoardIdBulk = commentRepository.findCountListAndBoardIdBulk(ids);
+    public Page<BoardResponseDto> findBoardsOnePage(BoardSearchConditionRequest boardSearchConditionRequest, Pageable pageable) {
+        List<Long> ids = boardRepository.findIdsFromPaginationWithKeyword(boardSearchConditionRequest, pageable);
+        List<CommentCountsWithBoardIdResponseDto> countListAndBoardIdBulk = commentRepository.findCountListAndBoardIdBulk(ids);
 
-        Map<Long, CommentCountsWithBoardIdDto> boardIdWithCommentNumber = new HashMap<>();
+        Map<Long, CommentCountsWithBoardIdResponseDto> boardIdWithCommentNumber = new HashMap<>();
         countListAndBoardIdBulk.forEach(commentDto -> boardIdWithCommentNumber.put(commentDto.getBoardId(), commentDto));
 
-        Page<Board> pageDataFromBoardByIds = boardRepository.findPageDataFromBoardByIds(ids, boardSearchCondition, pageable);
+        Page<Board> pageDataFromBoardByIds = boardRepository.findPageDataFromBoardByIds(ids, boardSearchConditionRequest, pageable);
 
-        List<BoardDto> boardDtos = new ArrayList<>();
-        pageDataFromBoardByIds.getContent().forEach(board -> boardDtos.add(BoardDto.builder()
+        List<BoardResponseDto> boardResponseDtos = new ArrayList<>();
+        pageDataFromBoardByIds.getContent().forEach(board -> boardResponseDtos.add(BoardResponseDto.builder()
                 .id(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
@@ -46,12 +46,12 @@ public class BoardService {
                 .commentCount(commentCountFromCommentDto(boardIdWithCommentNumber.get(board.getId())))
                 .build()));
 
-        return new PageImpl<>(boardDtos, pageable, pageDataFromBoardByIds.getTotalElements());
+        return new PageImpl<>(boardResponseDtos, pageable, pageDataFromBoardByIds.getTotalElements());
     }
 
-    private long commentCountFromCommentDto(CommentCountsWithBoardIdDto commentCountsWithBoardIdDto) {
-        if (commentCountsWithBoardIdDto == null) return 0L;
+    private long commentCountFromCommentDto(CommentCountsWithBoardIdResponseDto commentCountsWithBoardIdResponseDto) {
+        if (commentCountsWithBoardIdResponseDto == null) return 0L;
 
-        return commentCountsWithBoardIdDto.getNumberOfComments();
+        return commentCountsWithBoardIdResponseDto.getNumberOfComments();
     }
 }

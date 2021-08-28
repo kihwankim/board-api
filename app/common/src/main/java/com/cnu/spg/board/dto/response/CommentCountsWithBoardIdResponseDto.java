@@ -1,13 +1,13 @@
-package com.cnu.spg.board.dto;
+package com.cnu.spg.board.dto.response;
 
 import lombok.Data;
 
 @Data
-public class CommentCountsWithBoardIdDto {
+public class CommentCountsWithBoardIdResponseDto {
     private Long boardId;
     private long numberOfComments;
 
-    public CommentCountsWithBoardIdDto(Long boardId, long numberOfComments) {
+    public CommentCountsWithBoardIdResponseDto(Long boardId, long numberOfComments) {
         this.boardId = boardId;
         this.numberOfComments = numberOfComments;
     }
