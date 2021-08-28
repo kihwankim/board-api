@@ -12,21 +12,21 @@ buildscript {
 }
 
 allprojects {
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
+    group 'com.cnu.spg'
+    version '0.0.1-SNAPSHOT'
 }
 
 subprojects {
-    group 'com.cnu.spg'
-    version '0.0.1-SNAPSHOT'
-
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'jacoco'
 
     sourceCompatibility = 11
+
+    repositories {
+        mavenCentral()
+    }
 
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -38,10 +38,44 @@ subprojects {
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
 
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
     test {
         useJUnitPlatform()
         testLogging {
             events "passed", "skipped", "failed"
+        }
+    }
+}
+
+def testProjects = [
+        project(':app:api-service'),
+        project(':app:core-module'),
+        project(':app:common')
+]
+
+configure(testProjects) {
+    apply plugin: 'jacoco'
+
+    jacoco {
+        toolVersion = '0.8.7'
+    }
+
+    jacocoTestReport {
+        executionData(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+
+        reports {
+            html.enabled true
+            xml.enabled true
+            csv.enabled false
+        }
+
+        for (testProject in testProjects) {
+            sourceSets(testProject.sourceSets["main"] as SourceSet)
         }
     }
 }
