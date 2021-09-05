@@ -1,5 +1,5 @@
 dependencies {
-    implementation project(':app:common')
+    implementation project(':app:domain-common')
     implementation project(':app:core-module')
 
     implementation 'com.querydsl:querydsl-jpa'

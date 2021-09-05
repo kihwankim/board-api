@@ -1,5 +1,5 @@
 dependencies {
-    implementation project(':app:common')
+    implementation project(':app:domain-common')
     implementation project(':app:core-module')
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'

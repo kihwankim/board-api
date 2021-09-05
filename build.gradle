@@ -55,7 +55,7 @@ subprojects {
 def testProjects = [
         project(':app:api-service'),
         project(':app:core-module'),
-        project(':app:common')
+        project(':app:domain-common')
 ]
 
 configure(testProjects) {
