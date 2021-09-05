@@ -15,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@DiscriminatorValue("E")
+@DiscriminatorValue(value = BoardType.Values.EDU)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EduBoard extends Board {
 
