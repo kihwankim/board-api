@@ -65,7 +65,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    public void deleteByUsername() throws Exception {
+    void deleteByUsername() throws Exception {
         // given
 
         // when
