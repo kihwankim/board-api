@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.persistence.EntityManager;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -52,16 +54,15 @@ class UserRepositoryTest {
     }
 
     @Test
-    void findByNotExistUsername() {
+    void findByNotExistUsername() throws Exception {
         // given
         final String findedUsername = "error";
 
         // when
-
+        Optional<User> findUser = userRepository.findByUsername(findedUsername);
 
         // then
-        assertThrows(UsernameNotFoundException.class, () -> userRepository.findByUsername(findedUsername)
-                .orElseThrow(() -> new UsernameNotFoundException("exception")));
+        assertThrows(UsernameNotFoundException.class, () -> findUser.orElseThrow(() -> new UsernameNotFoundException("exception")));
     }
 
     @Test
@@ -70,10 +71,10 @@ class UserRepositoryTest {
 
         // when
         userRepository.deleteByUsername(username);
+        Optional<User> findUser = userRepository.findByUsername(username);
 
         // then
-        assertThrows(UsernameNotFoundException.class, () -> userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("not found")));
+        assertThrows(UsernameNotFoundException.class, () -> findUser.orElseThrow(() -> new UsernameNotFoundException("not found")));
     }
 
     @Test
