@@ -3,6 +3,7 @@ package com.cnu.spg.user.domain;
 import com.cnu.spg.board.domain.Board;
 import com.cnu.spg.board.domain.Comment;
 import com.cnu.spg.domain.BaseEntity;
+import com.cnu.spg.team.domain.TeamElement;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,10 @@ public class User extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<TeamElement> teamElements = new ArrayList<>();
+
+    // mywriting 을로 빼기
     @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
 
@@ -51,6 +56,11 @@ public class User extends BaseEntity {
         this.name = name;
         this.username = username;
         this.password = password;
+    }
+
+    public void joinNewTeam(TeamElement teamElement) {
+        this.teamElements.add(teamElement);
+        teamElement.changeMember(this);
     }
 
     public void changePassword(String newEncryptPassword) {

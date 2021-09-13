@@ -1,5 +1,6 @@
 package com.cnu.spg.user.service;
 
+import com.cnu.spg.api.user.service.UserService;
 import com.cnu.spg.user.domain.Role;
 import com.cnu.spg.user.domain.RoleName;
 import com.cnu.spg.user.domain.User;
@@ -229,5 +230,14 @@ class UserServiceTest {
 
     @Test
     void updateUsernameAndName() {
+    }
+
+    @Test
+    void getAllTeamGroup() throws Exception {
+        // given
+        
+        // when
+
+        // then
     }
 }

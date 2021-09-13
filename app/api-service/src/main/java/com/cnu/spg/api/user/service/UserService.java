@@ -1,5 +1,8 @@
-package com.cnu.spg.user.service;
+package com.cnu.spg.api.user.service;
 
+import com.cnu.spg.api.user.dto.response.TeamResponseDto;
+import com.cnu.spg.team.domain.TeamElement;
+import com.cnu.spg.team.repository.TeamElementRepository;
 import com.cnu.spg.user.domain.Role;
 import com.cnu.spg.user.domain.RoleName;
 import com.cnu.spg.user.domain.User;
@@ -8,6 +11,7 @@ import com.cnu.spg.user.dto.UserRegisterDto;
 import com.cnu.spg.user.dto.response.UserInfoResponseDto;
 import com.cnu.spg.user.exception.PasswordNotMatchException;
 import com.cnu.spg.user.exception.ResourceNotFoundException;
+import com.cnu.spg.user.exception.UserNotFoundException;
 import com.cnu.spg.user.exception.UsernameAlreadyExistException;
 import com.cnu.spg.user.repository.RoleRepository;
 import com.cnu.spg.user.repository.UserRepository;
@@ -17,6 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -24,6 +30,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final TeamElementRepository teamJoinMemberRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -103,5 +110,14 @@ public class UserService {
         user.changeName(name);
 
         return user;
+    }
+
+
+    public TeamResponseDto fetchJoinedTeamNames(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+        List<TeamElement> allTeamMembersByUserId = teamJoinMemberRepository.findAllTeamMembersByUserId(user.getId());
+
+        return new TeamResponseDto(allTeamMembersByUserId);
     }
 }

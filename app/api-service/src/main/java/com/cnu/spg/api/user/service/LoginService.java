@@ -1,4 +1,4 @@
-package com.cnu.spg.user.service;
+package com.cnu.spg.api.user.service;
 
 import com.cnu.spg.user.domain.User;
 import com.cnu.spg.user.domain.UserPrincipal;
