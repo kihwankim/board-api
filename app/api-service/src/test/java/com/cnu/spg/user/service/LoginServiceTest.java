@@ -1,6 +1,6 @@
 package com.cnu.spg.user.service;
 
-import com.cnu.spg.api.user.service.LoginService;
+import com.cnu.spg.security.service.LoginService;
 import com.cnu.spg.user.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
