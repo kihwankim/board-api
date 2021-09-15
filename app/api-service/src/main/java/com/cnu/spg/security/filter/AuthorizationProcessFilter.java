@@ -23,13 +23,12 @@ import java.util.ArrayList;
 @Slf4j
 public class AuthorizationProcessFilter extends AbstractAuthenticationProcessingFilter {
     private static final String LOGIN_HTTP_METHOD = "POST";
-    private static final String LOGIN_DEFAULT_URL = "/v1/login";
 
     private final TokenProvider tokenProvider;
 
 
-    public AuthorizationProcessFilter(TokenProvider tokenProvider, AuthenticationManager authenticationManager) {
-        super(new AntPathRequestMatcher(LOGIN_DEFAULT_URL, LOGIN_HTTP_METHOD));
+    public AuthorizationProcessFilter(TokenProvider tokenProvider, AuthenticationManager authenticationManager, String defaultLoginUrl) {
+        super(new AntPathRequestMatcher(defaultLoginUrl, LOGIN_HTTP_METHOD));
         setAuthenticationManager(authenticationManager);
         this.tokenProvider = tokenProvider;
     }

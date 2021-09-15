@@ -1,6 +1,7 @@
 package com.cnu.spg.security.config;
 
 import com.cnu.spg.security.filter.AuthorizationProcessFilter;
+import com.cnu.spg.security.handler.AuthFailureHandler;
 import com.cnu.spg.security.provider.AuthProvider;
 import com.cnu.spg.security.token.JWTProvider;
 import com.cnu.spg.security.token.TokenProvider;
@@ -44,7 +45,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthorizationProcessFilter authorizationProcessFilter() throws Exception {
-        return new AuthorizationProcessFilter(tokenProvider(), authenticationManagerBean());
+        AuthorizationProcessFilter authorizationProcessFilter = new AuthorizationProcessFilter(tokenProvider(), authenticationManagerBean(), LOGIN_URL_PATH);
+        authorizationProcessFilter.setAuthenticationFailureHandler(new AuthFailureHandler());
+
+        return authorizationProcessFilter;
     }
 
     @Bean
