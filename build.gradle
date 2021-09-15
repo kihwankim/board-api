@@ -8,27 +8,25 @@ buildscript {
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
         classpath "io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE"
-    }
-}
-
-allprojects {
-    repositories {
-        mavenCentral()
-        jcenter()
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.0"
     }
 }
 
 subprojects {
-    group 'com.cnu.spg'
-    version '0.0.1-SNAPSHOT'
-
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
+    group 'com.cnu.spg'
+    version '0.0.1-SNAPSHOT'
     sourceCompatibility = 11
 
+    repositories {
+        mavenCentral()
+    }
+
     dependencies {
+        implementation("org.springframework.boot:spring-boot-starter-validation")
         implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
         developmentOnly 'org.springframework.boot:spring-boot-devtools'
         compileOnly 'org.projectlombok:lombok'
@@ -37,10 +35,58 @@ subprojects {
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
 
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
     test {
         useJUnitPlatform()
         testLogging {
             events "passed", "skipped", "failed"
+        }
+    }
+}
+
+def testProjects = [
+        project(':app:api-service'),
+        project(':app:core-module'),
+        project(':app:domain-common')
+]
+
+configure(testProjects) {
+    apply plugin: 'jacoco'
+    apply plugin: 'org.sonarqube'
+
+    jacoco {
+        toolVersion = '0.8.7'
+    }
+
+    jacocoTestReport {
+        executionData(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+
+        reports {
+            html.enabled true
+            xml.enabled true
+            csv.enabled false
+        }
+
+        for (testProject in testProjects) {
+            sourceSets(testProject.sourceSets["main"] as SourceSet)
+        }
+    }
+
+    sonarqube {
+        properties {
+            property "sonar.host.url", "http://localhost:9090"
+            property "sonar.login", "910b5a218ab0fe14c43f5d46dc372739e581766e"
+            property "sonar.sources", "src"
+            property "sonar.language", "java"
+            property "sonar.sourceEncoding", "UTF-8"
+            property "sonar.test.inclusions", "**/*Test.java"
+            property "sonar.exclusions", "**/*Test*.*, **/Q*.JAVA"
+            property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
         }
     }
 }

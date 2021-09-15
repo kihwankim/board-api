@@ -1,6 +1,7 @@
 package com.cnu.spg.config.local;
 
 import com.cnu.spg.board.domain.Board;
+import com.cnu.spg.board.domain.EduBoard;
 import com.cnu.spg.board.repository.BoardRepository;
 import com.cnu.spg.user.domain.Role;
 import com.cnu.spg.user.domain.RoleName;
@@ -41,14 +42,14 @@ public class LocalConfig {
             String content = "content";
             String title = "title";
 
-            User john = userRepository.findByUsername("john")
+            User john = userRepository.findByUsername("john@gmail.com")
                     .orElseThrow(() -> new UsernameNotFoundException("not found"));
 
             for (int index = 0; index < 30; index++) {
                 String titleWithNum = title + "_" + index;
                 String contentWithNum = content + "_" + index;
 
-                Board board = Board.builder()
+                Board board = EduBoard.builder()
                         .user(john)
                         .title(titleWithNum)
                         .content(contentWithNum)
@@ -75,11 +76,11 @@ public class LocalConfig {
             roleRepository.save(admin);
             roleRepository.save(student);
             roleRepository.save(unAuth);
-            String password = "fun123";
+            String password = "Abcd123!";
 
-            User john = User.createUser("john", "john", passwordEncoder.encode(password), admin);
-            User susan = User.createUser("susan", "susan", passwordEncoder.encode(password), unAuth);
-            User amanda = User.createUser("amanda", "amanda", passwordEncoder.encode(password), admin, student);
+            User john = User.createUser("john", "john@gmail.com", passwordEncoder.encode(password), admin);
+            User susan = User.createUser("susan", "susan@gmail.com", passwordEncoder.encode(password), unAuth);
+            User amanda = User.createUser("amanda", "amanda@gmail.com", passwordEncoder.encode(password), admin, student);
 
             userRepository.save(john);
             userRepository.save(susan);
