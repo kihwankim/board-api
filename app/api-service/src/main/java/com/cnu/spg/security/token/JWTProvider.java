@@ -37,6 +37,18 @@ public class JWTProvider implements TokenProvider {
         return tokenHeaderName;
     }
 
+    @Override
+    public String getTokenData(String token) {
+        String username = Jwts.parser().setSigningKey(tokenSecretKey)
+                .parseClaimsJws(token).getBody()
+                .getSubject();
+        if (username == null || username.isEmpty()) {
+            return null;
+        }
+
+        return username;
+    }
+
     private Date createExpireTime(Date start) {
         return new Date(start.getTime() + expireTime);
     }

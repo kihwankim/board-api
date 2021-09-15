@@ -1,5 +1,6 @@
 package com.cnu.spg.security.config;
 
+import com.cnu.spg.security.filter.AuthenticationTokenValidFilter;
 import com.cnu.spg.security.filter.AuthorizationProcessFilter;
 import com.cnu.spg.security.handler.AuthFailureHandler;
 import com.cnu.spg.security.provider.AuthProvider;
@@ -52,6 +53,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    public AuthenticationTokenValidFilter authenticationTokenValidFilter() {
+        return new AuthenticationTokenValidFilter(loginDetailService, tokenProvider());
+    }
+
+    @Bean
     public AuthenticationProvider authenticationProvider() {
         return new AuthProvider(loginDetailService, passwordEncoder());
     }
@@ -85,6 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS); // session 사용하지 않음
 
         http
+                .addFilterBefore(authenticationTokenValidFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(authorizationProcessFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

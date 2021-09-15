@@ -6,4 +6,6 @@ public interface TokenProvider {
     String createToken(UserDetails userDetails);
 
     String getTokenHeaderName();
+
+    String getTokenData(String token);
 }
