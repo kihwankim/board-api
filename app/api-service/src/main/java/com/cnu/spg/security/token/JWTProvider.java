@@ -34,19 +34,13 @@ public class JWTProvider implements TokenProvider {
 
         Date now = new Date();
         Date expireDate = createExpireTime(now);
-        Map<String, Object> payload = new HashMap<>();
-        payload.put(CLAIM_ID_KEY, ((UserPrincipal) userDetails).getId());
 
         return Jwts.builder()
+                .setClaims(createClaim(userDetails))
                 .setSubject(userDetails.getUsername())
                 .setExpiration(expireDate)
-                .setClaims(payload)
                 .signWith(SignatureAlgorithm.HS256, tokenSecretKey)
                 .compact();
-    }
-
-    private Date createExpireTime(Date start) {
-        return new Date(start.getTime() + expireTime);
     }
 
     @Override
@@ -73,5 +67,16 @@ public class JWTProvider implements TokenProvider {
                 .parseClaimsJws(token) // 파싱 및 검증, 실패 시 에러
                 .getBody();
 
+    }
+
+    private Date createExpireTime(Date start) {
+        return new Date(start.getTime() + expireTime);
+    }
+
+    private Map<String, Object> createClaim(UserDetails userDetails) {
+        Map<String, Object> payload = new HashMap<>();
+        payload.put(CLAIM_ID_KEY, ((UserPrincipal) userDetails).getId().toString());
+
+        return payload;
     }
 }
