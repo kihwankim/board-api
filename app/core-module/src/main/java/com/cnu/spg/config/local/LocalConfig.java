@@ -42,7 +42,7 @@ public class LocalConfig {
             String content = "content";
             String title = "title";
 
-            User john = userRepository.findByUsername("john")
+            User john = userRepository.findByUsername("john@gmail.com")
                     .orElseThrow(() -> new UsernameNotFoundException("not found"));
 
             for (int index = 0; index < 30; index++) {
