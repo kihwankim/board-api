@@ -76,11 +76,11 @@ public class LocalConfig {
             roleRepository.save(admin);
             roleRepository.save(student);
             roleRepository.save(unAuth);
-            String password = "fun123";
+            String password = "Abcd123!";
 
-            User john = User.createUser("john", "john", passwordEncoder.encode(password), admin);
-            User susan = User.createUser("susan", "susan", passwordEncoder.encode(password), unAuth);
-            User amanda = User.createUser("amanda", "amanda", passwordEncoder.encode(password), admin, student);
+            User john = User.createUser("john", "john@gmail.com", passwordEncoder.encode(password), admin);
+            User susan = User.createUser("susan", "susan@gmail.com", passwordEncoder.encode(password), unAuth);
+            User amanda = User.createUser("amanda", "amanda@gmail.com", passwordEncoder.encode(password), admin, student);
 
             userRepository.save(john);
             userRepository.save(susan);
