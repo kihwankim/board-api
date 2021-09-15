@@ -31,7 +31,7 @@ public class AuthenticationTokenValidFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String requestHeaderToken = request.getHeader(tokenHeaderName);
         if (requestHeaderToken != null) {
-            String username = tokenProvider.getTokenData(requestHeaderToken);
+            String username = tokenProvider.getTokenSubject(requestHeaderToken);
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication == null) {
