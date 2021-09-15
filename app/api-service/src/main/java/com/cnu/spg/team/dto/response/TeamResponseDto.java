@@ -1,4 +1,4 @@
-package com.cnu.spg.api.user.dto.response;
+package com.cnu.spg.team.dto.response;
 
 import com.cnu.spg.team.domain.TeamElement;
 import lombok.Data;

@@ -1,7 +1,6 @@
-package com.cnu.spg.api.user.controller;
+package com.cnu.spg.user.controller;
 
-import com.cnu.spg.api.user.dto.response.TeamResponseDto;
-import com.cnu.spg.api.user.service.UserService;
+import com.cnu.spg.user.service.UserService;
 import com.cnu.spg.user.dto.UserPasswordChangingDto;
 import com.cnu.spg.user.dto.UserRegisterDto;
 import com.cnu.spg.user.dto.response.UserInfoResponseDto;
@@ -64,13 +63,5 @@ public class UserApiController {
     @GetMapping("/user-service/v1/users/{userId}")
     public ResponseEntity<UserInfoResponseDto> getMyProfile(@PathVariable("userId") Long userId) {
         return ResponseEntity.ok(userService.searchUserInfo(userId));
-    }
-
-
-    @ApiOperation("회원이 속해 있는 모든 Team 가져오기")
-    @GetMapping("/api/user-service/v1/users/{userId}/teams")
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
-    public ResponseEntity<TeamResponseDto> getJoinedTeamNames(@PathVariable("userId") Long userId) {
-        return ResponseEntity.ok(userService.fetchJoinedTeamNames(userId));
     }
 }
