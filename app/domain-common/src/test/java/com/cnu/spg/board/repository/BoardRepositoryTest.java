@@ -1,8 +1,8 @@
 package com.cnu.spg.board.repository;
 
+import com.cnu.spg.board.dto.request.BoardSearchConditionRequest;
 import com.cnu.spg.board.domain.Board;
 import com.cnu.spg.board.domain.EduBoard;
-import com.cnu.spg.board.dto.request.BoardSearchConditionRequest;
 import com.cnu.spg.user.domain.User;
 import com.cnu.spg.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;

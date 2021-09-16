@@ -1,6 +1,6 @@
 package com.cnu.spg.security.handler;
 
-import com.cnu.spg.user.exception.LoginRequestParamterNotValidException;
+import com.cnu.spg.security.exception.LoginRequestParamterNotValidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;

@@ -2,7 +2,7 @@ package com.cnu.spg.security.filter;
 
 import com.cnu.spg.security.dto.request.LoginRequestDto;
 import com.cnu.spg.security.token.TokenProvider;
-import com.cnu.spg.user.exception.LoginRequestParamterNotValidException;
+import com.cnu.spg.security.exception.LoginRequestParamterNotValidException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,6 +1,6 @@
-package com.cnu.spg.util;
+package com.cnu.spg.security.util;
 
-import com.cnu.spg.user.exception.LoginRequestParamterNotValidException;
+import com.cnu.spg.security.exception.LoginRequestParamterNotValidException;
 
 public class UserdataValidatorUtils {
     public static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$#!%*?&])[A-Za-z\\d@$#!%*?&]{5,80}$";

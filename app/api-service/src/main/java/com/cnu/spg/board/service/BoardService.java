@@ -1,8 +1,8 @@
 package com.cnu.spg.board.service;
 
+import com.cnu.spg.board.dto.request.BoardSearchConditionRequest;
 import com.cnu.spg.board.domain.Board;
 import com.cnu.spg.board.domain.BoardType;
-import com.cnu.spg.board.dto.request.BoardSearchConditionRequest;
 import com.cnu.spg.board.dto.response.BoardResponseDto;
 import com.cnu.spg.board.dto.response.CommentCountsWithBoardIdResponseDto;
 import com.cnu.spg.board.exception.BoardNotFoundException;

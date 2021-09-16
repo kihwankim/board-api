@@ -1,4 +1,4 @@
-package com.cnu.spg.user.exception;
+package com.cnu.spg.security.exception;
 
 import org.springframework.security.core.AuthenticationException;
 

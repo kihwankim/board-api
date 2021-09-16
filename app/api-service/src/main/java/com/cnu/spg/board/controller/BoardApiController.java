@@ -1,7 +1,7 @@
 package com.cnu.spg.board.controller;
 
-import com.cnu.spg.board.domain.BoardType;
 import com.cnu.spg.board.dto.request.BoardSearchConditionRequest;
+import com.cnu.spg.board.domain.BoardType;
 import com.cnu.spg.board.dto.request.BoardsRequset;
 import com.cnu.spg.board.dto.response.BoardResponseDto;
 import com.cnu.spg.board.exception.NotExistBoardTypeException;
