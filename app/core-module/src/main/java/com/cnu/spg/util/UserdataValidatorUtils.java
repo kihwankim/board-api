@@ -3,7 +3,7 @@ package com.cnu.spg.util;
 import com.cnu.spg.user.exception.LoginRequestParamterNotValidException;
 
 public class UserdataValidatorUtils {
-    public static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$#!%*?&]{5,80}$";
+    public static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$#!%*?&])[A-Za-z\\d@$#!%*?&]{5,80}$";
     private static final int MAX_USERNAME_LEN = 80;
     private static final int MIN_USERNAME_LEN = 5;
 
