@@ -1,9 +1,9 @@
 package com.cnu.spg.user.controller;
 
-import com.cnu.spg.user.service.UserService;
 import com.cnu.spg.user.dto.UserPasswordChangingDto;
 import com.cnu.spg.user.dto.UserRegisterDto;
 import com.cnu.spg.user.dto.response.UserInfoResponseDto;
+import com.cnu.spg.user.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +25,6 @@ public class UserApiController {
     private static final String PASSWORD_NOT_MATCHED_MSG = "password is not matched";
 
     private final UserService userService;
-
-    @ApiOperation("health check용도로 사용")
-    @GetMapping("/api/user-service/v1/health-check")
-    public String checkAlive() {
-        return "alive";
-    }
 
     @ApiOperation("회원가입 요청")
     @PostMapping("/user-service/v1/users")
