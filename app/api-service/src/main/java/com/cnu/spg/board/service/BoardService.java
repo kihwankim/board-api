@@ -1,9 +1,11 @@
 package com.cnu.spg.board.service;
 
 import com.cnu.spg.board.domain.Board;
-import com.cnu.spg.board.dto.response.BoardResponseDto;
+import com.cnu.spg.board.domain.BoardType;
 import com.cnu.spg.board.dto.request.BoardSearchConditionRequest;
+import com.cnu.spg.board.dto.response.BoardResponseDto;
 import com.cnu.spg.board.dto.response.CommentCountsWithBoardIdResponseDto;
+import com.cnu.spg.board.exception.BoardNotFoundException;
 import com.cnu.spg.board.repository.BoardRepository;
 import com.cnu.spg.board.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,5 +55,14 @@ public class BoardService {
         if (commentCountsWithBoardIdResponseDto == null) return 0L;
 
         return commentCountsWithBoardIdResponseDto.getNumberOfComments();
+    }
+
+    public BoardResponseDto getBoard(BoardType boardType, Long id) {
+        Board board = boardRepository.findById(id)
+                .orElseThrow(BoardNotFoundException::new);
+        // TODO : board 정보 가져오기
+//        if (board.getT)
+
+        return null;
     }
 }
