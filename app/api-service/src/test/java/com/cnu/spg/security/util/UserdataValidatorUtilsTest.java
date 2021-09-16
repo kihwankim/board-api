@@ -1,6 +1,6 @@
-package com.cnu.spg.util;
+package com.cnu.spg.security.util;
 
-import com.cnu.spg.user.exception.LoginRequestParamterNotValidException;
+import com.cnu.spg.security.exception.LoginRequestParamterNotValidException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UserdataValidatorUtilsTest {
-
     @Test
     @DisplayName("username 정상 케이스")
     void isUsernameLengthValid() {
@@ -142,7 +141,7 @@ class UserdataValidatorUtilsTest {
         // then
         assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid(password));
     }
-    
+
     @Test
     @DisplayName("특수문자만 사용한 경우")
     void isPasswordValidOnlySpeicalChar() throws Exception {
@@ -150,7 +149,7 @@ class UserdataValidatorUtilsTest {
         String password = "!@#%**";
 
         // when
-        
+
         // then
         assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid(password));
     }
