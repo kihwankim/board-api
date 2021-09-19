@@ -19,7 +19,7 @@ public class ProjectCategory extends BaseEntity {
     private String categoryName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_category_id")
+    @JoinColumn(name = "parent_id")
     private ProjectCategory parent;
 
     @OneToMany(mappedBy = "parent")
