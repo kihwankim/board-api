@@ -3,6 +3,7 @@ package com.cnu.spg.board.controller;
 import com.cnu.spg.board.domain.BoardType;
 import com.cnu.spg.board.dto.request.BoardSearchConditionRequest;
 import com.cnu.spg.board.dto.request.BoardsRequset;
+import com.cnu.spg.board.dto.request.ProjectCategoryRequestDto;
 import com.cnu.spg.board.dto.response.BoardResponseDto;
 import com.cnu.spg.board.dto.response.CategoriesResponseDto;
 import com.cnu.spg.board.exception.NotExistBoardTypeException;
@@ -19,10 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -68,5 +66,14 @@ public class BoardApiController {
     @GetMapping("/api/v1/categories")
     public ResponseEntity<CategoriesResponseDto> getAllJoinedCategories(@UserId User user) {
         return ResponseEntity.ok(projectService.findAllUserCategories(user.getId()));
+    }
+
+    @ApiOperation("[권한] project category 추가")
+    @PostMapping("/api/v1/categories")
+    public ResponseEntity<URI> createCategory(@UserId User user, @Valid @RequestBody ProjectCategoryRequestDto projectCategoryRequestDto) {
+        Long savedId = projectService.createProjectCategory(user, projectCategoryRequestDto.getCategoryName(), projectCategoryRequestDto.getParentCategoryId());
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(savedId).toUri();
+
+        return ResponseEntity.created(uri).build();
     }
 }

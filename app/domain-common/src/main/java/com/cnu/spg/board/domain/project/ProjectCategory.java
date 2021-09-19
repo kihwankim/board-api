@@ -2,7 +2,10 @@ package com.cnu.spg.board.domain.project;
 
 import com.cnu.spg.domain.BaseEntity;
 import com.cnu.spg.user.domain.User;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,6 +18,7 @@ import java.util.List;
                 columnNames = {"categoryName", "category_owner", "parent_id"}
         )
 })
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProjectCategory extends BaseEntity {
     @Id
     @Column(name = "project_category_id")
@@ -35,6 +39,10 @@ public class ProjectCategory extends BaseEntity {
     @JoinColumn(name = "category_owner")
     private User categoryOwner;
 
-    @OneToMany
-    private List<ProjectBoard> projectBoards;
+    @Builder
+    public ProjectCategory(User user, ProjectCategory parent, String categoryName) {
+        this.categoryOwner = user;
+        this.parent = parent;
+        this.categoryName = categoryName;
+    }
 }
