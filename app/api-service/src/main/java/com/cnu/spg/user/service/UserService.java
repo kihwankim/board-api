@@ -1,5 +1,6 @@
 package com.cnu.spg.user.service;
 
+import com.cnu.spg.comon.exception.NotFoundException;
 import com.cnu.spg.user.domain.Role;
 import com.cnu.spg.user.domain.RoleName;
 import com.cnu.spg.user.domain.User;
@@ -44,6 +45,11 @@ public class UserService {
     public User findByUserName(String userName) {
         return this.userRepository.findByUsername(userName)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "user name", userName));
+    }
+
+    public User findByUserId(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("사용자 ID를 찾지 못 하였습니다"));
     }
 
     @Transactional

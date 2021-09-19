@@ -9,6 +9,7 @@ import com.cnu.spg.board.exception.NotExistBoardTypeException;
 import com.cnu.spg.board.service.BoardService;
 import com.cnu.spg.board.service.ProjectService;
 import com.cnu.spg.config.resolver.UserId;
+import com.cnu.spg.user.domain.User;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -20,9 +21,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @Slf4j
 @RestController
@@ -62,7 +66,7 @@ public class BoardApiController {
 
     @ApiOperation("[권한] project board를 위한 category 정보 가져오기")
     @GetMapping("/api/v1/categories")
-    public ResponseEntity<CategoriesResponseDto> getAllJoinedCategories(@UserId Long userId) {
-        return ResponseEntity.ok(projectService.findAllUserCategories(userId));
+    public ResponseEntity<CategoriesResponseDto> getAllJoinedCategories(@UserId User user) {
+        return ResponseEntity.ok(projectService.findAllUserCategories(user.getId()));
     }
 }
