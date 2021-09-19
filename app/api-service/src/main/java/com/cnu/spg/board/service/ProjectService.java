@@ -64,6 +64,7 @@ public class ProjectService {
         return projectCategoryElements;
     }
 
+    @Transactional
     public Long createProjectCategory(User user, String categoryName, Long parentCategoryId) {
         ProjectCategory parentCategory = null;
         if (parentCategoryId != null) {

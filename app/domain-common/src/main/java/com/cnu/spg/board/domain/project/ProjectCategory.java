@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,7 +34,7 @@ public class ProjectCategory extends BaseEntity {
     private ProjectCategory parent;
 
     @OneToMany(mappedBy = "parent")
-    private List<ProjectCategory> children;
+    private List<ProjectCategory> children = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_owner")

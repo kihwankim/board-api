@@ -31,7 +31,7 @@ public class UserIdResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         boolean hasAnnotation = parameter.getParameterAnnotation(UserId.class) != null;
-        boolean isMatchType = parameter.getParameterType().equals(Long.class);
+        boolean isMatchType = parameter.getParameterType().equals(User.class);
 
         if (hasAnnotation && httpServletRequest.getHeader(authHeaderName) == null) {
             throw new IllegalArgumentException("UserId 정보를 찾을 수 없습니다.");
