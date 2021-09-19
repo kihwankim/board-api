@@ -9,6 +9,12 @@ import java.util.List;
 
 @Entity
 @Getter
+@Table(uniqueConstraints = {
+        @UniqueConstraint(
+                name = "category_name_user_id",
+                columnNames = {"categoryName", "category_owner", "parent_id"}
+        )
+})
 public class ProjectCategory extends BaseEntity {
     @Id
     @Column(name = "project_category_id")
@@ -26,7 +32,7 @@ public class ProjectCategory extends BaseEntity {
     private List<ProjectCategory> children;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_category_onwer"))
+    @JoinColumn(name = "category_owner")
     private User categoryOwner;
 
     @OneToMany
