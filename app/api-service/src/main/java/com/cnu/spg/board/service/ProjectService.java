@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.groupingBy;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -19,13 +21,20 @@ public class ProjectService {
 
     public CategoriesResponseDto findAllUserCategories(Long userId) {
         List<ProjectCategory> categories = projectCategoryRepository.findByCategoriesById(userId);
-        List<ProjectCategory> parentsCategories = categories.stream().filter(projectCategory -> projectCategory.getParent() == null)
+        List<ProjectCategory> parentsCategories = categories
+                .parallelStream()
+                .filter(projectCategory -> projectCategory.getParent() == null)
                 .collect(Collectors.toList());
 
-        return new CategoriesResponseDto(createTreeCategories(parentsCategories));
+        Map<Long, List<ProjectCategory>> parentsMappedCategoriesCache = categories
+                .stream()
+                .filter(projectCategory -> projectCategory.getParent() != null)
+                .collect(groupingBy(projectCategory -> projectCategory.getParent().getId()));
+
+        return new CategoriesResponseDto(createTreeCategories(parentsCategories, parentsMappedCategoriesCache));
     }
 
-    private List<ProjectCategoryElement> createTreeCategories(List<ProjectCategory> parentsCategories) {
+    private List<ProjectCategoryElement> createTreeCategories(List<ProjectCategory> parentsCategories, Map<Long, List<ProjectCategory>> parentsMappedCategoriesCache) {
         Queue<ProjectCategory> projectCategoryQueue = new LinkedList<>();
         List<ProjectCategoryElement> projectCategoryElements = new ArrayList<>();
         Map<Long, ProjectCategoryElement> parentCache = new HashMap<>();
@@ -40,8 +49,9 @@ public class ProjectService {
         while (!projectCategoryQueue.isEmpty()) {
             ProjectCategory parent = projectCategoryQueue.poll();
             ProjectCategoryElement parentDto = parentCache.get(parent.getId());
+            List<ProjectCategory> children = parentsMappedCategoriesCache.getOrDefault(parent.getId(), new ArrayList<>());
 
-            for (ProjectCategory child : parent.getChildren()) {
+            for (ProjectCategory child : children) {
                 ProjectCategoryElement projectCategoryElement = new ProjectCategoryElement(child.getId(), child.getCategoryName(), new ArrayList<>());
                 projectCategoryQueue.add(child);
                 parentDto.getChildren().add(projectCategoryElement);
