@@ -16,7 +16,7 @@ public class ProjectCategoryQueryRepositoryImpl implements ProjectCategoryQueryR
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ProjectCategory> findByCategoriesById(Long userId) {
+    public List<ProjectCategory> findCategoriesByUserId(Long userId) {
         return queryFactory.selectFrom(projectCategory)
                 .where(eqOwnerUserId(userId))
                 .fetch();
