@@ -42,7 +42,7 @@ public class ProjectService {
             ProjectCategoryElement parentDto = parentCache.get(parent.getId());
 
             for (ProjectCategory child : parent.getChildren()) {
-                ProjectCategoryElement projectCategoryElement = new ProjectCategoryElement(parent.getId(), parent.getCategoryName(), new ArrayList<>());
+                ProjectCategoryElement projectCategoryElement = new ProjectCategoryElement(child.getId(), child.getCategoryName(), new ArrayList<>());
                 projectCategoryQueue.add(child);
                 parentDto.getChildren().add(projectCategoryElement);
                 parentCache.put(projectCategoryElement.getCategoryId(), projectCategoryElement);
