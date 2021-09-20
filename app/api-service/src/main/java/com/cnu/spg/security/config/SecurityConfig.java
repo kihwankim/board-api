@@ -4,7 +4,6 @@ import com.cnu.spg.security.filter.AuthenticationTokenValidFilter;
 import com.cnu.spg.security.filter.AuthorizationProcessFilter;
 import com.cnu.spg.security.handler.AuthFailureHandler;
 import com.cnu.spg.security.provider.AuthProvider;
-import com.cnu.spg.security.token.JWTProvider;
 import com.cnu.spg.security.token.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,14 +13,15 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_URL_PATH = "/v1/login";
@@ -34,16 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] H2_CONSOLE_PATH = new String[]{"/h2-console/**"};
 
     private final UserDetailsService loginDetailService;
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
-
-    @Bean
-    public TokenProvider tokenProvider() {
-        return new JWTProvider();
-    }
+    private final PasswordEncoder passwordEncoder;
+    private final TokenProvider tokenProvider;
 
     @Bean
     @Override
@@ -53,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthorizationProcessFilter authorizationProcessFilter() throws Exception {
-        AuthorizationProcessFilter authorizationProcessFilter = new AuthorizationProcessFilter(tokenProvider(), authenticationManagerBean(), LOGIN_URL_PATH);
+        AuthorizationProcessFilter authorizationProcessFilter = new AuthorizationProcessFilter(tokenProvider, authenticationManagerBean(), LOGIN_URL_PATH);
         authorizationProcessFilter.setAuthenticationFailureHandler(new AuthFailureHandler());
 
         return authorizationProcessFilter;
@@ -61,12 +53,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationTokenValidFilter authenticationTokenValidFilter() {
-        return new AuthenticationTokenValidFilter(loginDetailService, tokenProvider());
+        return new AuthenticationTokenValidFilter(loginDetailService, tokenProvider);
     }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        return new AuthProvider(loginDetailService, passwordEncoder());
+        return new AuthProvider(loginDetailService, passwordEncoder);
     }
 
     @Override
