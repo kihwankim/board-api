@@ -36,8 +36,8 @@ class UserServiceTest {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    String existUsername = "john";
-    String existUserPassword = "fun123";
+    String existUsername = "john@gmail.com";
+    String existUserPassword = "Abc123!";
 
     @BeforeEach
     void setUp() {
@@ -64,8 +64,8 @@ class UserServiceTest {
     @DisplayName("회원 가입 성공")
     void regiesterUser() {
         // givne
-        String newUsername = "newuser";
-        String userPassword = "password";
+        String newUsername = "newuser@gmail.com";
+        String userPassword = "Password123!";
         String newName = "name";
         UserRegisterDto userRegisterDto = UserRegisterDto.builder()
                 .userName(newUsername)
@@ -91,7 +91,7 @@ class UserServiceTest {
     @DisplayName("이미 존재하는 username 입력시 에러 발생")
     void registerUserFail_For_ExistUsername() throws Exception {
         // given
-        String password = "fun123";
+        String password = existUserPassword;
 
         // when
         UserRegisterDto userRegisterDto = UserRegisterDto.builder()
@@ -150,7 +150,7 @@ class UserServiceTest {
     @DisplayName("존재하지 않는 user 회원 탈퇴 요청")
     void delete_NotExist_User_Test() throws Exception {
         // given
-        String notExistUsername = "notexist";
+        String notExistUsername = "notexist@gmail.com";
 
         // when
 
@@ -166,8 +166,8 @@ class UserServiceTest {
         String existUsername = this.existUsername;
         String existPassword = this.existUserPassword;
 
-        String newPassword = "newpassword";
-        String newPasswordMatching = "newpassword";
+        String newPassword = "Newpassword1!";
+        String newPasswordMatching = "Newpassword1!";
 
         UserPasswordChangingDto passwordChangingDto = new UserPasswordChangingDto(existPassword, newPassword, newPasswordMatching);
 
@@ -185,10 +185,10 @@ class UserServiceTest {
     void failChangin_Cuz_Not_Matched_PrevisouPassword_Test() throws Exception {
         // given
         String existUsername = this.existUsername;
-        String notMatchedPassword = "notMatchedPassword";
+        String notMatchedPassword = "NotMatchedPassword1!";
 
-        String newPassword = "newpassword";
-        String newPasswordMatching = "newpassword";
+        String newPassword = "Newpassword1!";
+        String newPasswordMatching = "Newpassword1!";
 
         UserPasswordChangingDto passwordChangingDto = new UserPasswordChangingDto(notMatchedPassword, newPassword, newPasswordMatching);
 
@@ -204,8 +204,8 @@ class UserServiceTest {
         String existUsername = "notExistuseranme";
         String existPassword = this.existUserPassword;
 
-        String newPassword = "newpassword";
-        String newPasswordMatching = "newpassword";
+        String newPassword = "Newpassword1!";
+        String newPasswordMatching = "Newpassword1!";
 
         UserPasswordChangingDto passwordChangingDto = new UserPasswordChangingDto(existPassword, newPassword, newPasswordMatching);
 
@@ -234,7 +234,7 @@ class UserServiceTest {
     @Test
     void getAllTeamGroup() throws Exception {
         // given
-        
+
         // when
 
         // then
