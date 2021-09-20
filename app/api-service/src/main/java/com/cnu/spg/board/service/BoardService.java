@@ -1,8 +1,8 @@
 package com.cnu.spg.board.service;
 
-import com.cnu.spg.board.dto.request.BoardSearchConditionRequest;
 import com.cnu.spg.board.domain.Board;
 import com.cnu.spg.board.domain.BoardType;
+import com.cnu.spg.board.dto.condition.BoardSearchCondition;
 import com.cnu.spg.board.dto.response.BoardResponseDto;
 import com.cnu.spg.board.dto.response.CommentCountsWithBoardIdResponseDto;
 import com.cnu.spg.board.exception.BoardNotFoundException;
@@ -17,9 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -29,14 +30,15 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
 
-    public Page<BoardResponseDto> findBoardsOnePage(BoardSearchConditionRequest boardSearchConditionRequest, Pageable pageable) {
-        List<Long> ids = boardRepository.findIdsFromPaginationWithKeyword(boardSearchConditionRequest, pageable);
+    public Page<BoardResponseDto> findBoardsOnePage(BoardSearchCondition boardSearchCondition, Pageable pageable) {
+        List<Long> ids = boardRepository.findIdsFromPaginationWithKeyword(boardSearchCondition, pageable);
         List<CommentCountsWithBoardIdResponseDto> countListAndBoardIdBulk = commentRepository.findCountListAndBoardIdBulk(ids);
 
-        Map<Long, CommentCountsWithBoardIdResponseDto> boardIdWithCommentNumber = new HashMap<>();
-        countListAndBoardIdBulk.forEach(commentDto -> boardIdWithCommentNumber.put(commentDto.getBoardId(), commentDto));
+        Map<Long, CommentCountsWithBoardIdResponseDto> boardIdWithCommentNumber = countListAndBoardIdBulk
+                .stream()
+                .collect(Collectors.toMap(CommentCountsWithBoardIdResponseDto::getBoardId, Function.identity()));
 
-        Page<Board> pageDataFromBoardByIds = boardRepository.findPageDataFromBoardByIds(ids, boardSearchConditionRequest, pageable);
+        Page<Board> pageDataFromBoardByIds = boardRepository.findPageDataFromBoardByIds(ids, boardSearchCondition, pageable);
 
         List<BoardResponseDto> boardResponseDtos = new ArrayList<>();
         pageDataFromBoardByIds.getContent().forEach(board -> boardResponseDtos.add(BoardResponseDto.builder()

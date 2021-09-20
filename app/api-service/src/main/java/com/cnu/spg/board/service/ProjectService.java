@@ -1,16 +1,26 @@
 package com.cnu.spg.board.service;
 
+import com.cnu.spg.board.domain.Board;
 import com.cnu.spg.board.domain.project.ProjectCategory;
+import com.cnu.spg.board.dto.condition.ProjectBoardCondition;
+import com.cnu.spg.board.dto.response.BoardResponseDto;
 import com.cnu.spg.board.dto.response.CategoriesResponseDto;
+import com.cnu.spg.board.dto.response.CommentCountsWithBoardIdResponseDto;
 import com.cnu.spg.board.dto.response.ProjectCategoryElement;
+import com.cnu.spg.board.repository.BoardRepository;
+import com.cnu.spg.board.repository.CommentRepository;
 import com.cnu.spg.board.repository.project.ProjectCategoryRepository;
 import com.cnu.spg.comon.exception.NotFoundException;
 import com.cnu.spg.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
@@ -20,6 +30,8 @@ import static java.util.stream.Collectors.groupingBy;
 @Transactional(readOnly = true)
 public class ProjectService {
     private final ProjectCategoryRepository projectCategoryRepository;
+    private final BoardRepository boardRepository;
+    private final CommentRepository commentRepository;
 
     public CategoriesResponseDto findAllUserCategories(Long userId) {
         List<ProjectCategory> categories = projectCategoryRepository.findCategoriesByUserId(userId);
@@ -81,5 +93,38 @@ public class ProjectService {
         ProjectCategory savedCategory = projectCategoryRepository.save(createdCategory);
 
         return savedCategory.getId();
+    }
+
+    public Page<BoardResponseDto> findProjectBoardsOnePage(ProjectBoardCondition projectBoardCondition, Pageable pageable, Long categoryId) {
+        ProjectCategory category = projectCategoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NotFoundException("Category is not exist"));
+        List<Long> ids = boardRepository.findProjectBoardIdsFromPaginationWithKeyword(projectBoardCondition, category, pageable);
+        List<CommentCountsWithBoardIdResponseDto> countListAndBoardIdBulk = commentRepository.findCountListAndBoardIdBulk(ids);
+
+        Map<Long, CommentCountsWithBoardIdResponseDto> boardIdWithCommentNumber = countListAndBoardIdBulk
+                .stream()
+                .collect(Collectors.toMap(CommentCountsWithBoardIdResponseDto::getBoardId, Function.identity()));
+
+        Page<Board> pageDataFromBoardByIds = boardRepository.findProjectPageDataFromBoardByIds(ids, projectBoardCondition, category, pageable);
+
+        List<BoardResponseDto> boardResponseDtos = pageDataFromBoardByIds
+                .getContent().stream()
+                .map(board -> BoardResponseDto.builder()
+                        .id(board.getId())
+                        .title(board.getTitle())
+                        .content(board.getContent())
+                        .writerId(board.getWriterId())
+                        .writerName(board.getWriterName())
+                        .commentCount(commentCountFromCommentDto(boardIdWithCommentNumber.get(board.getId())))
+                        .build()
+                ).collect(Collectors.toList());
+
+        return new PageImpl<>(boardResponseDtos, pageable, pageDataFromBoardByIds.getTotalElements());
+    }
+
+    private long commentCountFromCommentDto(CommentCountsWithBoardIdResponseDto commentCountsWithBoardIdResponseDto) {
+        if (commentCountsWithBoardIdResponseDto == null) return 0L;
+
+        return commentCountsWithBoardIdResponseDto.getNumberOfComments();
     }
 }

@@ -23,8 +23,10 @@ public enum BoardType {
     }
 
     public static Optional<BoardType> findBoardTypeByKey(String key) {
+        String upperCaseKey = key.toUpperCase();
+
         return Arrays.stream(BoardType.values())
-                .filter(boardType -> boardType.getValue().equals(key))
+                .filter(boardType -> boardType.getValue().equals(upperCaseKey))
                 .findFirst();
     }
 
