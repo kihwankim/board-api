@@ -95,10 +95,7 @@ public class UserService {
         return new UserInfoResponseDto(findUser);
     }
 
-    public boolean checkNowPassword(String username, String passowrd) {
-        User user = this.userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
-
+    public boolean checkNowPassword(User user, String passowrd) {
         return this.passwordEncoder.matches(passowrd, user.getPassword());
     }
 

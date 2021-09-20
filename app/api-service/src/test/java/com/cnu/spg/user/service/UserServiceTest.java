@@ -5,6 +5,7 @@ import com.cnu.spg.user.domain.RoleName;
 import com.cnu.spg.user.domain.User;
 import com.cnu.spg.user.dto.UserPasswordChangingDto;
 import com.cnu.spg.user.dto.UserRegisterDto;
+import com.cnu.spg.user.dto.response.UserInfoResponseDto;
 import com.cnu.spg.user.exception.PasswordNotMatchException;
 import com.cnu.spg.user.exception.ResourceNotFoundException;
 import com.cnu.spg.user.exception.UsernameAlreadyExistException;
@@ -216,11 +217,46 @@ class UserServiceTest {
     }
 
     @Test
-    void testChangeUserPassword() {
+    @DisplayName("비밀번호 변경 성공 테스트")
+    void changeUserPasswordTest() {
+        // given
+        final String newPassword = "NewPassword12!@";
+        User user = userService.findByUserName(existUsername);
+        UserPasswordChangingDto passwordChangingDto = new UserPasswordChangingDto(existUserPassword, newPassword, newPassword);
+
+        // when
+        userService.changeUserPassword(user.getId(), passwordChangingDto);
+        User changedUser = userService.findByUserName(existUsername);
+
+        // then
+        assertTrue(passwordEncoder.matches(newPassword, changedUser.getPassword()));
     }
 
     @Test
-    void searchUserInfo() {
+    @DisplayName("not confirm error")
+    void changeUserPasswordButExistPasswordConfirm() throws Exception {
+        // given
+        final String newPassword = "NewPassword12!@";
+        final String existPasswordNotMatched = "notConfirmA!@1";
+        User user = userService.findByUserName(existUsername);
+        UserPasswordChangingDto passwordChangingDto = new UserPasswordChangingDto(existPasswordNotMatched, newPassword, newPassword);
+
+        // when
+
+        // then
+        assertThrows(PasswordNotMatchException.class, () -> userService.changeUserPassword(user.getId(), passwordChangingDto));
+    }
+
+    @Test
+    void searchUserInfoTest() {
+        // given
+        User existUser = userService.findByUserName(existUsername);
+
+        // when
+        UserInfoResponseDto userInfoResponseDto = userService.searchUserInfo(existUser.getId());
+
+        // then
+        assertEquals(userInfoResponseDto.getName(), existUser.getName());
     }
 
     @Test
@@ -229,14 +265,5 @@ class UserServiceTest {
 
     @Test
     void updateUsernameAndName() {
-    }
-
-    @Test
-    void getAllTeamGroup() throws Exception {
-        // given
-
-        // when
-
-        // then
     }
 }
