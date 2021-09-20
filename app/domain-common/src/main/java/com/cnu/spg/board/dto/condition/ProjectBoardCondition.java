@@ -1,7 +1,6 @@
 package com.cnu.spg.board.dto.condition;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
 @Data

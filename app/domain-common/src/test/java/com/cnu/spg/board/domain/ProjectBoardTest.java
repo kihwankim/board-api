@@ -1,18 +1,13 @@
 package com.cnu.spg.board.domain;
 
-import com.cnu.spg.board.domain.project.ProjectBoard;
-import com.cnu.spg.board.domain.project.ProjectReference;
-import com.cnu.spg.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 class ProjectBoardTest {
 
-//    @Test
-//    @DisplayName("eduboard에 user 추가")
-//    void registUserInEduBoard() throws Exception {
+    @Test
+    @DisplayName("eduboard에 user 추가")
+    void registUserInEduBoard() throws Exception {
 //        // given
 //        final String registerName = "regi";
 //        final String registerUsername = "regi@gmail.com";
@@ -38,8 +33,8 @@ class ProjectBoardTest {
 //                .extracting("user")
 //                .extracting("username")
 //                .contains(username);
-//    }
-//
+    }
+
 //    @Test
 //    @DisplayName("join element가 존재하지 않는 경우")
 //    void notFound_InEduBoard() throws Exception {
