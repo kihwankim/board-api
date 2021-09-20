@@ -3,4 +3,8 @@ spring:
     name: spg-api
   profiles:
     active: local
+    include:
+      - domain-dev
+      - domain-local
+      - jwt
 

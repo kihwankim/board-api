@@ -36,7 +36,6 @@ public class Comment extends BaseEntity {
     }
 
     public void connectUserWithComment(User user) {
-        user.getComments().add(this);
         this.user = user;
     }
 

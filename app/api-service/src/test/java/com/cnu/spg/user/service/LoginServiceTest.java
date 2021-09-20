@@ -26,9 +26,9 @@ class LoginServiceTest {
     public void userLoadingTest() throws Exception {
         // given
         final String username = "kkh@gmail.com";
-        User john = User.createUser("john", "john@gmail.com", "fun123");
-        User kkh = User.createUser("kkh", "kkh@gmail.com", "fun123");
-        User hello = User.createUser("hello", "hello@gmail.com", "fun123");
+        User john = User.createUser("john", "john@gmail.com", "Abc123!");
+        User kkh = User.createUser("kkh", "kkh@gmail.com", "Abc123!");
+        User hello = User.createUser("hello", "hello@gmail.com", "Abc123!");
 
         em.persist(john);
         em.persist(kkh);
