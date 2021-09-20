@@ -6,4 +6,5 @@ spring:
     include:
       - domain-dev
       - domain-local
+      - jwt
 

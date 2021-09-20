@@ -1,8 +1,2 @@
 server:
   port: 9500
-
-jwt:
-  token:
-    secret.key: JWTSecretKey
-    expiration.seconds: 60480000
-  http.request.header: Authorization

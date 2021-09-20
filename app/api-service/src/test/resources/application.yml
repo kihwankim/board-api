@@ -2,7 +2,7 @@ spring:
   application:
     name: spg-api
   profiles:
-    active: local
+    active: test
     include:
-      - domain-dev
-      - domain-local
+      - domain-test
+      - jwt
