@@ -1,21 +1,8 @@
-# 운영 환경
-spring:
-  thymeleaf:
-    cache: false
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/dev?serverTimezone=UTC
-    username: root
-    password: root
-
-  jpa:
-    database: mysql
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        format_sql: true
-        default_batch_fetch_size: 100
-
 server:
-  port: 8000
+  port: 9500
+
+jwt:
+  token:
+    secret.key: JWTSecretKey
+    expiration.seconds: 60480000
+  http.request.header: Authorization
