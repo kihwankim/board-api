@@ -2,7 +2,7 @@ package com.cnu.spg.board.repository;
 
 import com.cnu.spg.board.dto.request.BoardSearchConditionRequest;
 import com.cnu.spg.board.domain.Board;
-import com.cnu.spg.board.domain.EduBoard;
+import com.cnu.spg.board.domain.project.ProjectBoard;
 import com.cnu.spg.user.domain.User;
 import com.cnu.spg.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +52,7 @@ class BoardRepositoryTest {
         userRepository.save(user2);
 
         for (int index = 0; index < NUMBER_OF_SOME; index++) {
-            Board board = EduBoard.builder()
+            Board board = ProjectBoard.builder()
                     .title(TITLE_1_LIKE + index)
                     .content(CONTENT_1_LIKE + index)
                     .user(user1)
@@ -61,7 +61,7 @@ class BoardRepositoryTest {
         }
 
         for (int index = 0; index < NUMBER_OF_REST; index++) {
-            Board board = EduBoard.builder()
+            Board board = ProjectBoard.builder()
                     .title(TITLE_2_LIKE + index)
                     .content(CONTENT_2_LIKE + index)
                     .user(user2)

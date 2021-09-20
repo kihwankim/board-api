@@ -2,7 +2,6 @@ package com.cnu.spg.board.domain.project;
 
 import com.cnu.spg.board.domain.Board;
 import com.cnu.spg.board.domain.BoardType;
-import com.cnu.spg.team.domain.Team;
 import com.cnu.spg.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,19 +17,16 @@ import java.util.List;
 @DiscriminatorValue(value = BoardType.Values.PROJECT)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProjectBoard extends Board {
-
-//    @OneToMany(mappedBy = "eduBoard", cascade = CascadeType.ALL)
-//    private List<ProjectJoinUser> projectJoinUsers = new ArrayList<>();
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Team team;
-
     @ManyToOne
     @JoinColumn(name = "project_category_id")
-    ProjectCategory projectCategory;
+    private ProjectCategory projectCategory;
+
+    @OneToMany(mappedBy = "projectBoard")
+    private List<ProjectReference> projectReference = new ArrayList<>();
 
     @Builder
-    public ProjectBoard(User user, String title, String content) {
+    public ProjectBoard(User user, String title, String content, ProjectCategory projectCategory) {
         super(user, title, content);
+        this.projectCategory = projectCategory;
     }
 }
