@@ -11,6 +11,7 @@ jar {
 }
 
 dependencies {
+    implementation project(':app:core-module')
     implementation 'com.querydsl:querydsl-jpa'
     runtimeOnly 'mysql:mysql-connector-java'
     runtimeOnly 'com.h2database:h2'
