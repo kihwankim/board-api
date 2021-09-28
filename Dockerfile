@@ -8,4 +8,4 @@ FROM adoptopenjdk/openjdk11:alpine-jre
 ENV HOME=/usr/app
 COPY --from=BUILD  $HOME/api-service/build/libs/*.jar /app.jar
 
-ENTRYPOINT  ["java","-jar","app.jar"]
+ENTRYPOINT  ["java","-jar","app.jar", "--spring.profiles.active=dev"]
