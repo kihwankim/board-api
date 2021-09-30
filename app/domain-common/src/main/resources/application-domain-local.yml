@@ -12,13 +12,12 @@ spring:
     password:
   jpa:
     database-platform: H2
-    show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL57Dialect
         dialect.storage_engine: innodb
         default_batch_fetch_size: 500
         format_sql: true
-      open-in-view: false
+    open-in-view: false
