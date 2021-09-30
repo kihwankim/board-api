@@ -2,9 +2,12 @@ package com.cnu.spg.board.service;
 
 import com.cnu.spg.board.domain.Board;
 import com.cnu.spg.board.domain.BoardType;
+import com.cnu.spg.board.domain.Comment;
+import com.cnu.spg.board.domain.project.ProjectBoard;
+import com.cnu.spg.board.domain.project.ProjectReference;
 import com.cnu.spg.board.dto.condition.BoardSearchCondition;
 import com.cnu.spg.board.dto.reponse.CommentCountsWithBoardIdResponseDto;
-import com.cnu.spg.board.dto.response.BoardResponseDto;
+import com.cnu.spg.board.dto.response.*;
 import com.cnu.spg.board.exception.BoardNotFoundException;
 import com.cnu.spg.board.repository.BoardRepository;
 import com.cnu.spg.board.repository.CommentRepository;
@@ -16,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -59,12 +63,31 @@ public class BoardAllService {
         return commentCountsWithBoardIdResponseDto.getNumberOfComments();
     }
 
-    public BoardResponseDto getBoard(BoardType boardType, Long id) {
+    public BoardDetailResponseDto getBoard(BoardType boardType, Long id) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(BoardNotFoundException::new);
-        // TODO : board 정보 가져오기
-//        if (board.getT)
 
-        return null;
+        List<CommentResponseDto> comments = board.getComments()
+                .stream()
+                .map(comment -> new CommentResponseDto(comment.getId(), comment.getWriterName(), comment.getContent()))
+                .collect(Collectors.toList()); // N + 1 발생
+
+        if (boardType == BoardType.PROJECT && board instanceof ProjectBoard) {
+            return findProjectBoardElement((ProjectBoard) board, comments);
+        }
+
+        throw new InvalidParameterException("board type exception");
+    }
+
+    private ProjectBoardResponseDto findProjectBoardElement(ProjectBoard projectBoard, List<CommentResponseDto> comments) {
+        List<Long> referenceIds = projectBoard.getProjectReference().stream()
+                .map(projectReference -> projectBoard.getId())
+                .collect(Collectors.toList());
+        List<ProjectReference> referencedUsersByIds = boardRepository.findReferencedUsersByIds(referenceIds);
+        List<ProjectRefResponseDto> referenceUserDtos = referencedUsersByIds.stream()
+                .map(projectReference -> new ProjectRefResponseDto(projectReference.getReferenceUser().getName()))
+                .collect(Collectors.toList());
+
+        return new ProjectBoardResponseDto(projectBoard, comments, referenceUserDtos);
     }
 }

@@ -6,6 +6,7 @@ import com.cnu.spg.board.dto.condition.ProjectBoardCondition;
 import com.cnu.spg.board.dto.request.BoardsRequset;
 import com.cnu.spg.board.dto.request.ProjectBoardRequset;
 import com.cnu.spg.board.dto.request.ProjectCategoryRequestDto;
+import com.cnu.spg.board.dto.response.BoardDetailResponseDto;
 import com.cnu.spg.board.dto.response.BoardResponseDto;
 import com.cnu.spg.board.dto.response.CategoriesResponseDto;
 import com.cnu.spg.board.exception.NotExistBoardTypeException;
@@ -72,12 +73,10 @@ public class BoardApiController {
             @ApiImplicitParam(name = "id", value = "board id 정보", readOnly = true, paramType = "path")
     })
     @GetMapping("/api/v1/boards/{boardType}/{id}")
-    public ResponseEntity<?> getBoard(@PathVariable String boardType, @PathVariable("id") Long boardId) {
+    public ResponseEntity<? extends BoardDetailResponseDto> getBoard(@PathVariable String boardType, @PathVariable("id") Long boardId) {
         BoardType boardTypeEnum = BoardType.findBoardTypeByKey(boardType)
                 .orElseThrow(NotExistBoardTypeException::new);
-
-
-        return ResponseEntity.ok().body(boardId);
+        return ResponseEntity.ok().body(boardAllService.getBoard(boardTypeEnum, boardId));
     }
 
     @ApiOperation("[권한] project board를 위한 category 정보 가져오기")
