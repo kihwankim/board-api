@@ -3,8 +3,8 @@ package com.cnu.spg.board.service;
 import com.cnu.spg.board.domain.Board;
 import com.cnu.spg.board.domain.BoardType;
 import com.cnu.spg.board.dto.condition.BoardSearchCondition;
+import com.cnu.spg.board.dto.reponse.CommentCountsWithBoardIdResponseDto;
 import com.cnu.spg.board.dto.response.BoardResponseDto;
-import com.cnu.spg.board.dto.response.CommentCountsWithBoardIdResponseDto;
 import com.cnu.spg.board.exception.BoardNotFoundException;
 import com.cnu.spg.board.repository.BoardRepository;
 import com.cnu.spg.board.repository.CommentRepository;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class BoardService {
+public class BoardAllService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
 

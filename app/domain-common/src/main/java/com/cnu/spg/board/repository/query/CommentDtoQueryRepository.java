@@ -1,6 +1,6 @@
 package com.cnu.spg.board.repository.query;
 
-import com.cnu.spg.board.dto.response.CommentCountsWithBoardIdResponseDto;
+import com.cnu.spg.board.dto.reponse.CommentCountsWithBoardIdResponseDto;
 
 import java.util.List;
 

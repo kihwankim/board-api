@@ -5,7 +5,7 @@ import com.cnu.spg.board.domain.project.ProjectCategory;
 import com.cnu.spg.board.dto.condition.ProjectBoardCondition;
 import com.cnu.spg.board.dto.response.BoardResponseDto;
 import com.cnu.spg.board.dto.response.CategoriesResponseDto;
-import com.cnu.spg.board.dto.response.CommentCountsWithBoardIdResponseDto;
+import com.cnu.spg.board.dto.reponse.CommentCountsWithBoardIdResponseDto;
 import com.cnu.spg.board.dto.response.ProjectCategoryElement;
 import com.cnu.spg.board.repository.BoardRepository;
 import com.cnu.spg.board.repository.CommentRepository;
