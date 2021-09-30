@@ -59,8 +59,8 @@ public class UserApiController {
 
     @ApiOperation("[권한] user 비밀번호 확인")
     @PostMapping("/api/v1/users/{userId}/password")
-    public ResponseEntity<?> checkUserPasswordConfirm(@UserId User user, @PathVariable("userId") Long userId,
-                                                      @Valid @RequestBody PasswordConfirmRequestDto passwordConfirmRequestDto) {
+    public ResponseEntity<Void> checkUserPasswordConfirm(@UserId User user, @PathVariable("userId") Long userId,
+                                                         @Valid @RequestBody PasswordConfirmRequestDto passwordConfirmRequestDto) {
         if (user.getId().equals(userId)) {
             if (userService.checkNowPassword(user, passwordConfirmRequestDto.getPassword())) {
                 return ResponseEntity.noContent().build();
