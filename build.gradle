@@ -16,6 +16,8 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'jacoco'
+    apply plugin: 'org.sonarqube'
 
     group 'com.cnu.spg'
     version '0.0.1-SNAPSHOT'
@@ -44,37 +46,10 @@ subprojects {
     test {
         useJUnitPlatform()
         testLogging {
-            events "passed", "skipped", "failed"
+            events "failed"
+            exceptionFormat "full"
         }
-    }
-}
-
-def testProjects = [
-        project(':app:api-service'),
-        project(':app:core-module'),
-        project(':app:domain-common')
-]
-
-configure(testProjects) {
-    apply plugin: 'jacoco'
-    apply plugin: 'org.sonarqube'
-
-    jacoco {
-        toolVersion = '0.8.7'
-    }
-
-    jacocoTestReport {
-        executionData(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
-
-        reports {
-            html.enabled true
-            xml.enabled true
-            csv.enabled false
-        }
-
-        for (testProject in testProjects) {
-            sourceSets(testProject.sourceSets["main"] as SourceSet)
-        }
+        finalizedBy 'jacocoTestReport'
     }
 
     sonarqube {
@@ -85,8 +60,44 @@ configure(testProjects) {
             property "sonar.language", "java"
             property "sonar.sourceEncoding", "UTF-8"
             property "sonar.test.inclusions", "**/*Test.java"
-            property "sonar.exclusions", "**/*Test*.*, **/Q*.JAVA"
             property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+        }
+    }
+
+    jacoco {
+        toolVersion = '0.8.7'
+    }
+
+    jacocoTestReport {
+        dependsOn test // 리포트가 만들어지기 전 테스트 실행되어야 한다.
+        reports {
+            html.enabled true
+            xml.enabled true
+            csv.enabled false
+        }
+        finalizedBy 'jacocoTestCoverageVerification'
+    }
+
+    jacocoTestCoverageVerification {
+        def Qdomains = []
+        for (qPattern in "**/QA".."**/QZ") {
+            Qdomains.add(qPattern + "*")
+        }
+
+        afterEvaluate {
+            classDirectories.setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it, // 리포트 결과에 제외시킬 디렉토리
+                        exclude: ['**/LocalConfig*',
+                                  '**/ApiServiceApplication*',
+                                  '**/DummyData*'] + Qdomains)
+            }))
+        }
+    }
+
+    sonarqube {
+        properties {
+            property "sonar.sources", "src/main/java"
+            property "sonar.tests", "src/test/java"
         }
     }
 }

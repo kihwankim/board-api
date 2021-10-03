@@ -25,6 +25,10 @@ dependencies {
 
 def querydslDir = "$buildDir/generated/querydsl"
 
+task cleanGeneatedDir(type: Delete) {
+    delete file(querydslDir)
+}
+
 querydsl {
     jpa = true
     querydslSourcesDir = querydslDir
