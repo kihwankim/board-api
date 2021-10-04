@@ -1,7 +1,7 @@
 package com.cnu.spg.security.service;
 
 import com.cnu.spg.user.domain.User;
-import com.cnu.spg.user.domain.UserPrincipal;
+import com.cnu.spg.security.domain.UserPrincipal;
 import com.cnu.spg.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

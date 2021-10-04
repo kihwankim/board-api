@@ -2,8 +2,8 @@ package com.cnu.spg.user.controller;
 
 import com.cnu.spg.config.resolver.UserId;
 import com.cnu.spg.user.domain.User;
-import com.cnu.spg.user.dto.UserPasswordChangingDto;
-import com.cnu.spg.user.dto.UserRegisterDto;
+import com.cnu.spg.user.dto.requset.UserPasswordChangingDto;
+import com.cnu.spg.user.dto.requset.UserRegisterDto;
 import com.cnu.spg.user.dto.requset.PasswordConfirmRequestDto;
 import com.cnu.spg.user.dto.response.UserInfoResponseDto;
 import com.cnu.spg.user.exception.PasswordNotConfirmException;

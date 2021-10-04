@@ -1,7 +1,7 @@
 package com.cnu.spg.security.token;
 
 
-import com.cnu.spg.user.domain.UserPrincipal;
+import com.cnu.spg.security.domain.UserPrincipal;
 import com.cnu.spg.user.exception.UserTypeIsNotValid;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

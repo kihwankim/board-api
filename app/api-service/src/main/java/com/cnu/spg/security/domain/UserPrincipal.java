@@ -1,5 +1,6 @@
-package com.cnu.spg.user.domain;
+package com.cnu.spg.security.domain;
 
+import com.cnu.spg.user.domain.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,4 +1,4 @@
-package com.cnu.spg.user.dto;
+package com.cnu.spg.user.dto.requset;
 
 import com.cnu.spg.user.domain.validation.FieldMatch;
 import lombok.Builder;
