@@ -6,10 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.persistence.EntityManager;
-
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,7 +43,7 @@ class UserRepositoryTest {
 
         // when
         User findedUser = userRepository.findByUsername(findedUsername)
-                .orElseThrow(() -> new UsernameNotFoundException("exception"));
+                .orElseThrow(() -> new RuntimeException("exception"));
 
         // then
         assertEquals(findedUsername, findedUser.getUsername());
@@ -62,7 +60,7 @@ class UserRepositoryTest {
         Optional<User> findUser = userRepository.findByUsername(findedUsername);
 
         // then
-        assertThrows(UsernameNotFoundException.class, () -> findUser.orElseThrow(() -> new UsernameNotFoundException("exception")));
+        assertThrows(RuntimeException.class, () -> findUser.orElseThrow(() -> new RuntimeException("exception")));
     }
 
     @Test
@@ -74,7 +72,7 @@ class UserRepositoryTest {
         Optional<User> findUser = userRepository.findByUsername(username);
 
         // then
-        assertThrows(UsernameNotFoundException.class, () -> findUser.orElseThrow(() -> new UsernameNotFoundException("not found")));
+        assertThrows(RuntimeException.class, () -> findUser.orElseThrow(() -> new RuntimeException("not found")));
     }
 
     @Test

@@ -1,7 +1,7 @@
 package com.cnu.spg.board.repository;
 
 import com.cnu.spg.board.domain.Board;
-import com.cnu.spg.board.dto.request.BoardSearchConditionRequest;
+import com.cnu.spg.board.dto.condition.BoardSearchCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -38,14 +38,14 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
 
 
     @Override
-    public List<Long> findIdsFromPaginationWithKeyword(BoardSearchConditionRequest boardSearchConditionRequest, Pageable pageable) {
+    public List<Long> findIdsFromPaginationWithKeyword(BoardSearchCondition boardSearchCondition, Pageable pageable) {
         return queryFactory
                 .select(board.id)
                 .from(board)
                 .where(
-                        eqWriterName(boardSearchConditionRequest.getWriterName()),
-                        likeContent(boardSearchConditionRequest.getContentPart()),
-                        likeTitle(boardSearchConditionRequest.getTitlePart())
+                        eqWriterName(boardSearchCondition.getWriterName()),
+                        likeContent(boardSearchCondition.getContentPart()),
+                        likeTitle(boardSearchCondition.getTitlePart())
                 )
                 .orderBy(board.id.desc())
                 .limit(pageable.getPageSize())
@@ -54,7 +54,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     }
 
     @Override
-    public Page<Board> findPageDataFromBoardByIds(List<Long> ids, BoardSearchConditionRequest boardSearchConditionRequest, Pageable pageable) {
+    public Page<Board> findPageDataFromBoardByIds(List<Long> ids, BoardSearchCondition boardSearchCondition, Pageable pageable) {
         if (CollectionUtils.isEmpty(ids)) {
             return new PageImpl<>(new ArrayList<>());
         }
@@ -70,9 +70,9 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         JPAQuery<Board> countQuery = queryFactory
                 .selectFrom(board)
                 .where(
-                        eqWriterName(boardSearchConditionRequest.getWriterName()),
-                        likeContent(boardSearchConditionRequest.getContentPart()),
-                        likeTitle(boardSearchConditionRequest.getTitlePart())
+                        eqWriterName(boardSearchCondition.getWriterName()),
+                        likeContent(boardSearchCondition.getContentPart()),
+                        likeTitle(boardSearchCondition.getTitlePart())
                 );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);

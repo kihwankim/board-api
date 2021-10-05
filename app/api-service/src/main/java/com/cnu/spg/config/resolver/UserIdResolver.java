@@ -1,7 +1,9 @@
 package com.cnu.spg.config.resolver;
 
 import com.cnu.spg.security.token.TokenProvider;
+import com.cnu.spg.user.domain.User;
 import com.cnu.spg.user.exception.TokenIsNotValidException;
+import com.cnu.spg.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.MethodParameter;
@@ -21,6 +23,7 @@ import static com.cnu.spg.security.token.JWTProvider.CLAIM_ID_KEY;
 public class UserIdResolver implements HandlerMethodArgumentResolver {
     private final HttpServletRequest httpServletRequest;
     private final TokenProvider tokenProvider;
+    private final UserService userService;
 
     @Value("${jwt.http.request.header}")
     private String authHeaderName;
@@ -28,7 +31,7 @@ public class UserIdResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         boolean hasAnnotation = parameter.getParameterAnnotation(UserId.class) != null;
-        boolean isMatchType = parameter.getParameterType().equals(Long.class);
+        boolean isMatchType = parameter.getParameterType().equals(User.class);
 
         if (hasAnnotation && httpServletRequest.getHeader(authHeaderName) == null) {
             throw new IllegalArgumentException("UserId 정보를 찾을 수 없습니다.");
@@ -37,7 +40,7 @@ public class UserIdResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public User resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String authToken = webRequest.getHeader(authHeaderName);
 
         Map<String, Object> tokenPayload = tokenProvider.getTokenPayload(authToken);
@@ -48,6 +51,6 @@ public class UserIdResolver implements HandlerMethodArgumentResolver {
         }
         String userIdStr = (String) userId;
 
-        return Long.parseLong(userIdStr);
+        return userService.findByUserId(Long.parseLong(userIdStr));
     }
 }

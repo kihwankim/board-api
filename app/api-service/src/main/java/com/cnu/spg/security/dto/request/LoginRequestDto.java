@@ -1,6 +1,6 @@
 package com.cnu.spg.security.dto.request;
 
-import com.cnu.spg.util.UserdataValidatorUtils;
+import com.cnu.spg.security.util.UserdataValidatorUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

@@ -2,7 +2,7 @@ package com.cnu.spg.user.repository;
 
 import com.cnu.spg.user.domain.Role;
 import com.cnu.spg.user.domain.RoleName;
-import com.cnu.spg.user.exception.ResourceNotFoundException;
+import com.cnu.spg.user.exception.RoleNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import javax.persistence.EntityManager;
+import javax.persistence.RollbackException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,8 +46,8 @@ class RoleRepositoryTest {
         Optional<Role> roleNameOptional = roleRepository.findByName(roleUnauth);
 
         // then
-        assertThrows(ResourceNotFoundException.class, () -> roleNameOptional
-                .orElseThrow(() -> new ResourceNotFoundException(Role.class, "Not Found")));
+        assertThrows(RollbackException.class, () -> roleNameOptional
+                .orElseThrow(RollbackException::new));
     }
 
     @Test
@@ -56,7 +57,7 @@ class RoleRepositoryTest {
 
         // when
         Role findRole = roleRepository.findByName(adminRoleName)
-                .orElseThrow(() -> new ResourceNotFoundException(Role.class, "Not Found"));
+                .orElseThrow(RoleNotFoundException::new);
 
         // then
         assertEquals(adminRoleName, findRole.getName());

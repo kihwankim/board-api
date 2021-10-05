@@ -1,15 +1,14 @@
 package com.cnu.spg.user.domain;
 
-import com.cnu.spg.board.domain.Board;
-import com.cnu.spg.board.domain.Comment;
 import com.cnu.spg.domain.BaseEntity;
-import com.cnu.spg.team.domain.TeamElement;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Entity
@@ -29,24 +28,12 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 20)
     private String name;
 
-    private Calendar activeDate;
-
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
-
-    @OneToMany(mappedBy = "member")
-    private List<TeamElement> teamElements = new ArrayList<>();
-
-    // mywriting 을로 빼기
-    @OneToMany(mappedBy = "user")
-    private List<Comment> comments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<Board> boards = new ArrayList<>();
 
     public void addRole(Role role) {
         roles.add(role);
@@ -56,11 +43,6 @@ public class User extends BaseEntity {
         this.name = name;
         this.username = username;
         this.password = password;
-    }
-
-    public void joinNewTeam(TeamElement teamElement) {
-        this.teamElements.add(teamElement);
-        teamElement.changeMember(this);
     }
 
     public void changePassword(String newEncryptPassword) {

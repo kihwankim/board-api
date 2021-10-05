@@ -3,16 +3,16 @@ package com.cnu.spg.user.service;
 import com.cnu.spg.user.domain.Role;
 import com.cnu.spg.user.domain.RoleName;
 import com.cnu.spg.user.domain.User;
-import com.cnu.spg.user.dto.UserPasswordChangingDto;
-import com.cnu.spg.user.dto.UserRegisterDto;
+import com.cnu.spg.user.dto.requset.UserPasswordChangingDto;
+import com.cnu.spg.user.dto.requset.UserRegisterDto;
 import com.cnu.spg.user.dto.response.UserInfoResponseDto;
 import com.cnu.spg.user.exception.PasswordNotMatchException;
-import com.cnu.spg.user.exception.ResourceNotFoundException;
+import com.cnu.spg.user.exception.RoleNotFoundException;
+import com.cnu.spg.user.exception.UserNotFoundException;
 import com.cnu.spg.user.exception.UsernameAlreadyExistException;
 import com.cnu.spg.user.repository.RoleRepository;
 import com.cnu.spg.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +33,7 @@ public class UserService {
         }
 
         Role unAuthUserRole = roleRepository.findByName(RoleName.ROLE_UNAUTH)
-                .orElseThrow(() -> new ResourceNotFoundException("Role", "roleName", RoleName.ROLE_UNAUTH));
+                .orElseThrow(RoleNotFoundException::new);
 
         String encrytPassword = passwordEncoder.encode(userRegisterDto.getMatchingPassword());
         User user = User.createUser(userRegisterDto.getName(), userRegisterDto.getUserName(), encrytPassword, unAuthUserRole);
@@ -43,13 +43,18 @@ public class UserService {
 
     public User findByUserName(String userName) {
         return this.userRepository.findByUsername(userName)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "user name", userName));
+                .orElseThrow(UserNotFoundException::new);
+    }
+
+    public User findByUserId(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
     }
 
     @Transactional
     public void withdrawMemberShip(String username) {
         if (!userRepository.existsByUsername(username)) {
-            throw new UsernameNotFoundException(username);
+            throw new UserNotFoundException();
         }
 
         userRepository.deleteByUsername(username);
@@ -58,13 +63,13 @@ public class UserService {
     @Transactional
     public User changeUserPassword(String username, UserPasswordChangingDto userPasswordChangingDto) {
         User oridinaryUser = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
+                .orElseThrow(UserNotFoundException::new);
 
         if (!passwordEncoder.matches(userPasswordChangingDto.getBeforePassword()
                 , oridinaryUser.getPassword())) {
             throw new PasswordNotMatchException();
         }
-        oridinaryUser.changePassword(this.passwordEncoder.encode(userPasswordChangingDto.getPassword()));
+        oridinaryUser.changePassword(passwordEncoder.encode(userPasswordChangingDto.getPassword()));
 
         return oridinaryUser;
     }
@@ -72,7 +77,7 @@ public class UserService {
     @Transactional
     public void changeUserPassword(Long userId, UserPasswordChangingDto userPasswordChangingDto) {
         User oridinaryUser = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+                .orElseThrow(UserNotFoundException::new);
 
         if (!passwordEncoder.matches(userPasswordChangingDto.getBeforePassword()
                 , oridinaryUser.getPassword())) {
@@ -84,24 +89,12 @@ public class UserService {
 
     public UserInfoResponseDto searchUserInfo(Long userId) {
         User findUser = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException(User.class, userId));
+                .orElseThrow(UserNotFoundException::new);
 
         return new UserInfoResponseDto(findUser);
     }
 
-    public boolean checkNowPassword(String username, String passowrd) {
-        User user = this.userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
-
+    public boolean checkNowPassword(User user, String passowrd) {
         return this.passwordEncoder.matches(passowrd, user.getPassword());
-    }
-
-    @Transactional
-    public User updateUsernameAndName(String pastUserName, String username, String name) {
-        User user = this.userRepository.findByUsername(pastUserName)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
-        user.changeName(name);
-
-        return user;
     }
 }

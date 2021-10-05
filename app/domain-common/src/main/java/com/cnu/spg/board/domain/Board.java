@@ -16,9 +16,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Board extends BaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
-    Long id;
+    private Long id;
 
     @Column(length = 40)
     private String title;
@@ -37,16 +37,15 @@ public abstract class Board extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "board")
     private List<Comment> comments = new ArrayList<>();
 
-    @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_user_id")
     private User user;
 
-    public Board(User user, String title, String content) {
+    protected Board(User user, String title, String content) {
         this.title = title;
         this.writerId = user.getId();
         this.writerName = user.getName();
         this.content = content;
         this.user = user;
-        this.user.getBoards().add(this);
     }
 }
