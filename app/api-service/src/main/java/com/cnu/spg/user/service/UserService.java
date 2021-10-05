@@ -94,13 +94,4 @@ public class UserService {
     public boolean checkNowPassword(User user, String passowrd) {
         return this.passwordEncoder.matches(passowrd, user.getPassword());
     }
-
-    @Transactional
-    public User updateUsernameAndName(String pastUserName, String username, String name) {
-        User user = this.userRepository.findByUsername(pastUserName)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
-        user.changeName(name);
-
-        return user;
-    }
 }
