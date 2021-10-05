@@ -215,12 +215,13 @@ class UserServiceTest {
         roleRepository.save(admin);
         User john = User.createUser("john", "john@gmail.com", passwordEncoder.encode("Abc123!"), admin);
         User savedUser = userRepository.save(john);
+        Long id = savedUser.getId();
 
         // when
         UserPasswordChangingDto passwordChangingDto = new UserPasswordChangingDto("notConfirmA!@1", "NewPassword12!@", "NewPassword12!@");
 
         // then
-        assertThrows(PasswordNotMatchException.class, () -> userService.changeUserPassword(savedUser.getId(), passwordChangingDto));
+        assertThrows(PasswordNotMatchException.class, () -> userService.changeUserPassword(id, passwordChangingDto));
     }
 
     @Test

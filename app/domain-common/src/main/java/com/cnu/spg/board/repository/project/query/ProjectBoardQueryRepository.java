@@ -4,7 +4,6 @@ import com.cnu.spg.board.domain.Board;
 import com.cnu.spg.board.domain.project.ProjectCategory;
 import com.cnu.spg.board.domain.project.ProjectReference;
 import com.cnu.spg.board.dto.condition.ProjectBoardCondition;
-import com.cnu.spg.user.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

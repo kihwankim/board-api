@@ -6,7 +6,10 @@ import com.cnu.spg.user.domain.User;
 import com.cnu.spg.user.dto.requset.UserPasswordChangingDto;
 import com.cnu.spg.user.dto.requset.UserRegisterDto;
 import com.cnu.spg.user.dto.response.UserInfoResponseDto;
-import com.cnu.spg.user.exception.*;
+import com.cnu.spg.user.exception.PasswordNotMatchException;
+import com.cnu.spg.user.exception.RoleNotFoundException;
+import com.cnu.spg.user.exception.UserNotFoundException;
+import com.cnu.spg.user.exception.UsernameAlreadyExistException;
 import com.cnu.spg.user.repository.RoleRepository;
 import com.cnu.spg.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -74,7 +77,7 @@ public class UserService {
     @Transactional
     public void changeUserPassword(Long userId, UserPasswordChangingDto userPasswordChangingDto) {
         User oridinaryUser = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+                .orElseThrow(UserNotFoundException::new);
 
         if (!passwordEncoder.matches(userPasswordChangingDto.getBeforePassword()
                 , oridinaryUser.getPassword())) {

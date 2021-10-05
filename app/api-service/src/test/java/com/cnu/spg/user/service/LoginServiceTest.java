@@ -17,8 +17,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 class LoginServiceTest {
-    private static final String username = "kkh@gmail.com";
-
     LoginService loginService;
     UserRepository userRepository;
 
@@ -26,43 +24,34 @@ class LoginServiceTest {
     void setup() {
         userRepository = mock(UserRepository.class);
         loginService = new LoginService(userRepository);
-
-
-        User john = User.createUser("john", "john@gmail.com", "Abc123!");
-        User kkh = User.createUser("kkh", "kkh@gmail.com", "Abc123!");
-        User hello = User.createUser("hello", "hello@gmail.com", "Abc123!");
-
-        given(userRepository.findByUsername(john.getUsername()))
-                .willReturn(Optional.of(john));
-        given(userRepository.findByUsername(kkh.getUsername()))
-                .willReturn(Optional.of(kkh));
-        given(userRepository.findByUsername(hello.getUsername()))
-                .willReturn(Optional.of(hello));
     }
 
     @Test
     @DisplayName("username으로 회원 조회")
-    public void userLoadingTest() throws Exception {
+    void userLoadingTest() throws Exception {
         // given
 
+        User kkh = User.createUser("kkh", "kkh@gmail.com", "Abc123!");
+        given(userRepository.findByUsername(kkh.getUsername()))
+                .willReturn(Optional.of(kkh));
+
         // when
-        UserDetails userDetails = loginService.loadUserByUsername(username);
+        UserDetails userDetails = loginService.loadUserByUsername("kkh@gmail.com");
 
         // then
-        assertEquals(userDetails.getUsername(), username);
+        assertEquals("kkh@gmail.com", userDetails.getUsername());
     }
 
     @Test
     @DisplayName("username으로 회원 조회 실패")
     void userNotExistTest() throws Exception {
         // given
-        final String notExistUsername = "notexistUsername";
-        given(userRepository.findByUsername(notExistUsername))
+        given(userRepository.findByUsername("notexistUsername"))
                 .willReturn(Optional.empty());
 
         // when
 
         // then
-        assertThrows(UsernameNotFoundException.class, () -> loginService.loadUserByUsername(notExistUsername));
+        assertThrows(UsernameNotFoundException.class, () -> loginService.loadUserByUsername("notexistUsername"));
     }
 }
