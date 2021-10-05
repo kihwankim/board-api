@@ -2,6 +2,7 @@ package com.cnu.spg.board.repository.project.query;
 
 import com.cnu.spg.board.domain.Board;
 import com.cnu.spg.board.domain.project.ProjectCategory;
+import com.cnu.spg.board.domain.project.ProjectReference;
 import com.cnu.spg.board.dto.condition.ProjectBoardCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -19,6 +20,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.cnu.spg.board.domain.project.QProjectBoard.projectBoard;
+import static com.cnu.spg.board.domain.project.QProjectReference.projectReference;
+import static com.cnu.spg.user.domain.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
@@ -86,5 +89,20 @@ public class ProjectBoardQueryRepositoryImpl implements ProjectBoardQueryReposit
                 );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
+    }
+
+    @Override
+    public List<ProjectReference> findReferencedUsersByIds(List<Long> referenceIds) {
+        if (referenceIds.isEmpty()) {
+            return List.of();
+        }
+
+        return queryFactory.selectFrom(projectReference)
+                .join(user)
+                .where(
+                        projectReference.referenceUser.eq(user),
+                        projectReference.id.in(referenceIds)
+                )
+                .fetch();
     }
 }

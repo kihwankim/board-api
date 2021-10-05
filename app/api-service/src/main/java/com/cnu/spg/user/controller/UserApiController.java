@@ -1,8 +1,13 @@
 package com.cnu.spg.user.controller;
 
-import com.cnu.spg.user.dto.UserPasswordChangingDto;
-import com.cnu.spg.user.dto.UserRegisterDto;
+import com.cnu.spg.config.resolver.UserId;
+import com.cnu.spg.user.domain.User;
+import com.cnu.spg.user.dto.requset.UserPasswordChangingDto;
+import com.cnu.spg.user.dto.requset.UserRegisterDto;
+import com.cnu.spg.user.dto.requset.PasswordConfirmRequestDto;
 import com.cnu.spg.user.dto.response.UserInfoResponseDto;
+import com.cnu.spg.user.exception.PasswordNotConfirmException;
+import com.cnu.spg.user.exception.TokenIsNotValidException;
 import com.cnu.spg.user.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -27,7 +32,7 @@ public class UserApiController {
     private final UserService userService;
 
     @ApiOperation("회원가입 요청")
-    @PostMapping("/user-service/v1/users")
+    @PostMapping("/api/v1/users")
     public ResponseEntity<URI> register(@Valid @RequestBody UserRegisterDto userRegisterDto) {
 
         URI createUri = ServletUriComponentsBuilder
@@ -40,7 +45,7 @@ public class UserApiController {
 
     @ApiOperation("비밀 번호 변경")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
-    @PutMapping("/api/user-service/v1/users/{userId}/password")
+    @PutMapping("/api/v1/users/{userId}/password")
     public ResponseEntity<Void> changePassword(@PathVariable("userId") Long userId,
                                                @RequestBody @Valid UserPasswordChangingDto userPasswordChangingDto,
                                                BindingResult bindingResult) {
@@ -52,9 +57,23 @@ public class UserApiController {
         return ResponseEntity.noContent().build();
     }
 
+    @ApiOperation("[권한] user 비밀번호 확인")
+    @PostMapping("/api/v1/users/{userId}/password")
+    public ResponseEntity<Void> checkUserPasswordConfirm(@UserId User user, @PathVariable("userId") Long userId,
+                                                         @Valid @RequestBody PasswordConfirmRequestDto passwordConfirmRequestDto) {
+        if (user.getId().equals(userId)) {
+            if (userService.checkNowPassword(user, passwordConfirmRequestDto.getPassword())) {
+                return ResponseEntity.noContent().build();
+            }
+
+            throw new PasswordNotConfirmException();
+        }
+        throw new TokenIsNotValidException();
+    }
+
     @ApiOperation("회원 정보 조회")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
-    @GetMapping("/user-service/v1/users/{userId}")
+    @GetMapping("/api/v1/users/{userId}")
     public ResponseEntity<UserInfoResponseDto> getMyProfile(@PathVariable("userId") Long userId) {
         return ResponseEntity.ok(userService.searchUserInfo(userId));
     }

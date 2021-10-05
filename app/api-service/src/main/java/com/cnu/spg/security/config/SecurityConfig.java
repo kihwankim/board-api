@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-resources/**",
             "/v3/api-docs"
     };
-    private static final String[] H2_CONSOLE_PATH = new String[]{"/h2-console/**"};
+    private static final String[] H2_CONSOLE_PATH = new String[]{"/h2-console/**", "/h2-console"};
 
     private final UserDetailsService loginDetailService;
     private final PasswordEncoder passwordEncoder;

@@ -16,4 +16,3 @@ spring:
         dialect.storage_engine: innodb
         default_batch_fetch_size: 500
     open-in-view: false
-    show-sql: true

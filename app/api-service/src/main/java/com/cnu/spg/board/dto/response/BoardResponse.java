@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class BoardResponseDto {
+public class BoardResponse {
     private Long id;
 
     private String title;

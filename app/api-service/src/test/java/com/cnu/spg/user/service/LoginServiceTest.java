@@ -2,42 +2,56 @@ package com.cnu.spg.user.service;
 
 import com.cnu.spg.security.service.LoginService;
 import com.cnu.spg.user.domain.User;
+import com.cnu.spg.user.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import javax.persistence.EntityManager;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
-@SpringBootTest
-@Transactional
 class LoginServiceTest {
-
-    @Autowired
     LoginService loginService;
+    UserRepository userRepository;
 
-    @Autowired
-    EntityManager em;
+    @BeforeEach
+    void setup() {
+        userRepository = mock(UserRepository.class);
+        loginService = new LoginService(userRepository);
+    }
 
     @Test
-    public void userLoadingTest() throws Exception {
+    @DisplayName("username으로 회원 조회")
+    void userLoadingTest() throws Exception {
         // given
-        final String username = "kkh@gmail.com";
-        User john = User.createUser("john", "john@gmail.com", "Abc123!");
-        User kkh = User.createUser("kkh", "kkh@gmail.com", "Abc123!");
-        User hello = User.createUser("hello", "hello@gmail.com", "Abc123!");
 
-        em.persist(john);
-        em.persist(kkh);
-        em.persist(hello);
+        User kkh = User.createUser("kkh", "kkh@gmail.com", "Abc123!");
+        given(userRepository.findByUsername(kkh.getUsername()))
+                .willReturn(Optional.of(kkh));
 
         // when
-        UserDetails userDetails = loginService.loadUserByUsername(username);
+        UserDetails userDetails = loginService.loadUserByUsername("kkh@gmail.com");
 
         // then
-        assertEquals(userDetails.getUsername(), username);
+        assertEquals("kkh@gmail.com", userDetails.getUsername());
+    }
+
+    @Test
+    @DisplayName("username으로 회원 조회 실패")
+    void userNotExistTest() throws Exception {
+        // given
+        given(userRepository.findByUsername("notexistUsername"))
+                .willReturn(Optional.empty());
+
+        // when
+
+        // then
+        assertThrows(UsernameNotFoundException.class, () -> loginService.loadUserByUsername("notexistUsername"));
     }
 }

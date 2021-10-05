@@ -1,7 +1,10 @@
 package com.cnu.spg.security.util;
 
 import com.cnu.spg.security.exception.LoginRequestParamterNotValidException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserdataValidatorUtils {
     public static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$#!%*?&])[A-Za-z\\d@$#!%*?&]{5,80}$";
     private static final int MAX_USERNAME_LEN = 80;

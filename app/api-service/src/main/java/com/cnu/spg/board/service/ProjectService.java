@@ -3,14 +3,14 @@ package com.cnu.spg.board.service;
 import com.cnu.spg.board.domain.Board;
 import com.cnu.spg.board.domain.project.ProjectCategory;
 import com.cnu.spg.board.dto.condition.ProjectBoardCondition;
-import com.cnu.spg.board.dto.response.BoardResponseDto;
-import com.cnu.spg.board.dto.response.CategoriesResponseDto;
-import com.cnu.spg.board.dto.response.CommentCountsWithBoardIdResponseDto;
+import com.cnu.spg.board.dto.reponse.CommentCountsWithBoardIdDto;
+import com.cnu.spg.board.dto.response.BoardResponse;
+import com.cnu.spg.board.dto.response.CategoriesResponse;
 import com.cnu.spg.board.dto.response.ProjectCategoryElement;
+import com.cnu.spg.board.exception.CategoryNotFoundException;
 import com.cnu.spg.board.repository.BoardRepository;
 import com.cnu.spg.board.repository.CommentRepository;
 import com.cnu.spg.board.repository.project.ProjectCategoryRepository;
-import com.cnu.spg.comon.exception.NotFoundException;
 import com.cnu.spg.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,7 +33,7 @@ public class ProjectService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
 
-    public CategoriesResponseDto findAllUserCategories(Long userId) {
+    public CategoriesResponse findAllUserCategories(Long userId) {
         List<ProjectCategory> categories = projectCategoryRepository.findCategoriesByUserId(userId);
         List<ProjectCategory> parentsCategories = categories
                 .parallelStream()
@@ -45,7 +45,7 @@ public class ProjectService {
                 .filter(projectCategory -> projectCategory.getParent() != null)
                 .collect(groupingBy(projectCategory -> projectCategory.getParent().getId()));
 
-        return new CategoriesResponseDto(createTreeCategories(parentsCategories, parentsMappedCategoriesCache));
+        return new CategoriesResponse(createTreeCategories(parentsCategories, parentsMappedCategoriesCache));
     }
 
     private List<ProjectCategoryElement> createTreeCategories(List<ProjectCategory> parentsCategories, Map<Long, List<ProjectCategory>> parentsMappedCategoriesCache) {
@@ -81,7 +81,7 @@ public class ProjectService {
         ProjectCategory parentCategory = null;
         if (parentCategoryId != null) {
             parentCategory = projectCategoryRepository.findById(parentCategoryId)
-                    .orElseThrow(() -> new NotFoundException("부모 category가 없습니다"));
+                    .orElseThrow(CategoryNotFoundException::new);
         }
 
         ProjectCategory createdCategory = ProjectCategory.builder()
@@ -95,21 +95,21 @@ public class ProjectService {
         return savedCategory.getId();
     }
 
-    public Page<BoardResponseDto> findProjectBoardsOnePage(ProjectBoardCondition projectBoardCondition, Pageable pageable, Long categoryId) {
+    public Page<BoardResponse> findProjectBoardsOnePage(ProjectBoardCondition projectBoardCondition, Pageable pageable, Long categoryId) {
         ProjectCategory category = projectCategoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NotFoundException("Category is not exist"));
+                .orElseThrow(CategoryNotFoundException::new);
         List<Long> ids = boardRepository.findProjectBoardIdsFromPaginationWithKeyword(projectBoardCondition, category, pageable);
-        List<CommentCountsWithBoardIdResponseDto> countListAndBoardIdBulk = commentRepository.findCountListAndBoardIdBulk(ids);
+        List<CommentCountsWithBoardIdDto> countListAndBoardIdBulk = commentRepository.findCountListAndBoardIdBulk(ids);
 
-        Map<Long, CommentCountsWithBoardIdResponseDto> boardIdWithCommentNumber = countListAndBoardIdBulk
+        Map<Long, CommentCountsWithBoardIdDto> boardIdWithCommentNumber = countListAndBoardIdBulk
                 .stream()
-                .collect(Collectors.toMap(CommentCountsWithBoardIdResponseDto::getBoardId, Function.identity()));
+                .collect(Collectors.toMap(CommentCountsWithBoardIdDto::getBoardId, Function.identity()));
 
         Page<Board> pageDataFromBoardByIds = boardRepository.findProjectPageDataFromBoardByIds(ids, projectBoardCondition, category, pageable);
 
-        List<BoardResponseDto> boardResponseDtos = pageDataFromBoardByIds
+        List<BoardResponse> boardResponses = pageDataFromBoardByIds
                 .getContent().stream()
-                .map(board -> BoardResponseDto.builder()
+                .map(board -> BoardResponse.builder()
                         .id(board.getId())
                         .title(board.getTitle())
                         .content(board.getContent())
@@ -119,12 +119,12 @@ public class ProjectService {
                         .build()
                 ).collect(Collectors.toList());
 
-        return new PageImpl<>(boardResponseDtos, pageable, pageDataFromBoardByIds.getTotalElements());
+        return new PageImpl<>(boardResponses, pageable, pageDataFromBoardByIds.getTotalElements());
     }
 
-    private long commentCountFromCommentDto(CommentCountsWithBoardIdResponseDto commentCountsWithBoardIdResponseDto) {
-        if (commentCountsWithBoardIdResponseDto == null) return 0L;
+    private long commentCountFromCommentDto(CommentCountsWithBoardIdDto commentCountsWithBoardIdDto) {
+        if (commentCountsWithBoardIdDto == null) return 0L;
 
-        return commentCountsWithBoardIdResponseDto.getNumberOfComments();
+        return commentCountsWithBoardIdDto.getNumberOfComments();
     }
 }

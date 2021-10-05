@@ -62,12 +62,11 @@ class UserdataValidatorUtilsTest {
     @DisplayName("길이가 작은 경우 에러")
     void isPasswordValidLessThanMinLength() throws Exception {
         // given
-        String password = "aB1!";
 
         // when
 
         // then
-        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid(password));
+        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid("aB1!"));
     }
 
     @Test
@@ -86,95 +85,87 @@ class UserdataValidatorUtilsTest {
     @DisplayName("소문자만 사용한 경우")
     void isPasswordValidUseSmallCharacter() throws Exception {
         // given
-        String password = "abcdef";
 
         // when
 
         // then
-        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid(password));
+        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid("abcdef"));
     }
 
     @Test
     @DisplayName("대문자만 사용한 경우")
     void isPasswordValidOnlyUserUpperCaseCharacter() throws Exception {
         // given
-        String password = "ABCDEF";
 
         // when
 
         // then
-        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid(password));
+        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid("ABCDEF"));
     }
 
     @Test
     @DisplayName("문자열만 사용한 경우")
     void isPasswordValidUserOnlyCharacters() throws Exception {
         // given
-        String password = "aAbdfacda";
 
         // when
 
         // then
-        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid(password));
+        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid("aAbdfacda"));
     }
 
     @Test
     @DisplayName("숫자만 사용한 경우")
     void isPasswordValidUserOnlyDigit() throws Exception {
         // given
-        String password = "1231424";
 
         // when
 
         // then
-        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid(password));
+        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid("1231424"));
     }
 
     @Test
     @DisplayName("숫자와 문자열을 같이 사용한 경우")
     void isPasswordValidUserDigitWithChar() throws Exception {
         // given
-        String password = "abAsd1231424";
 
         // when
 
         // then
-        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid(password));
+        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid("abAsd1231424"));
     }
 
     @Test
     @DisplayName("특수문자만 사용한 경우")
     void isPasswordValidOnlySpeicalChar() throws Exception {
         // given
-        String password = "!@#%**";
 
         // when
 
         // then
-        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid(password));
+        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid("!@#%**"));
     }
 
     @Test
     @DisplayName("특수문자와 숫자만 사용한 경우")
     void isPasswordValidOnlySpeicalCharWithDigit() throws Exception {
         // given
-        String password = "!@#%**123";
 
         // when
 
         // then
-        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid(password));
+        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid("!@#%**123"));
     }
 
     @Test
     @DisplayName("특수 문자와 문자열만 상용한 경우")
     void isPasswordValidOnlySpeicalCharWithChar() throws Exception {
         // given
-        String password = "!@#%**avdA";
 
         // when
 
         // then
-        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid(password));
+        assertThrows(LoginRequestParamterNotValidException.class, () -> UserdataValidatorUtils.isPasswordValid("!@#%**avdA"));
     }
 }

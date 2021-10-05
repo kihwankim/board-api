@@ -1,9 +1,9 @@
 package com.cnu.spg.board.repository.query;
 
-import com.cnu.spg.board.dto.response.CommentCountsWithBoardIdResponseDto;
+import com.cnu.spg.board.dto.reponse.CommentCountsWithBoardIdDto;
 
 import java.util.List;
 
 public interface CommentDtoQueryRepository {
-    List<CommentCountsWithBoardIdResponseDto> findCountListAndBoardIdBulk(List<Long> boardIdx);
+    List<CommentCountsWithBoardIdDto> findCountListAndBoardIdBulk(List<Long> boardIdx);
 }
