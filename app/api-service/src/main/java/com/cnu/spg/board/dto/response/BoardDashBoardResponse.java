@@ -4,10 +4,10 @@ import lombok.Data;
 import org.springframework.data.domain.Page;
 
 @Data
-public class BoardDashBoardResponseDto {
-    Page<BoardResponseDto> boards;
+public class BoardDashBoardResponse {
+    Page<BoardResponse> boards;
 
-    public BoardDashBoardResponseDto(Page<BoardResponseDto> boards) {
+    public BoardDashBoardResponse(Page<BoardResponse> boards) {
         this.boards = boards;
     }
 }

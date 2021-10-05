@@ -1,15 +1,13 @@
 package com.cnu.spg.board.dto.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
-public class BoardDetailResponseDto {
+public class BoardResponse {
     private Long id;
 
     private String title;
@@ -20,5 +18,5 @@ public class BoardDetailResponseDto {
 
     private String content;
 
-    private List<CommentResponseDto> comments;
+    private long commentCount;
 }

@@ -1,6 +1,6 @@
 package com.cnu.spg.board.repository.query;
 
-import com.cnu.spg.board.dto.reponse.CommentCountsWithBoardIdResponseDto;
+import com.cnu.spg.board.dto.reponse.CommentCountsWithBoardIdDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -23,9 +23,9 @@ public class CommentDtoQueryRepositoryImpl implements CommentDtoQueryRepository 
     }
 
     @Override
-    public List<CommentCountsWithBoardIdResponseDto> findCountListAndBoardIdBulk(List<Long> boardIdx) {
+    public List<CommentCountsWithBoardIdDto> findCountListAndBoardIdBulk(List<Long> boardIdx) {
         return queryFactory.select(
-                        Projections.constructor(CommentCountsWithBoardIdResponseDto.class,
+                        Projections.constructor(CommentCountsWithBoardIdDto.class,
                                 comment.board.id, comment.count()
                         ))
                 .from(comment)

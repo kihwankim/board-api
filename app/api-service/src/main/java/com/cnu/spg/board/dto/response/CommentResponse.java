@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentResponseDto {
+public class CommentResponse {
     private Long id;
     private String name;
     private String comment;

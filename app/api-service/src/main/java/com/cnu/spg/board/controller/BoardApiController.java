@@ -4,11 +4,11 @@ import com.cnu.spg.board.domain.BoardType;
 import com.cnu.spg.board.dto.condition.BoardSearchCondition;
 import com.cnu.spg.board.dto.condition.ProjectBoardCondition;
 import com.cnu.spg.board.dto.request.BoardsRequset;
-import com.cnu.spg.board.dto.request.ProjectBoardRequset;
+import com.cnu.spg.board.dto.request.BoardTypeRequset;
 import com.cnu.spg.board.dto.request.ProjectCategoryRequestDto;
-import com.cnu.spg.board.dto.response.BoardDetailResponseDto;
-import com.cnu.spg.board.dto.response.BoardResponseDto;
-import com.cnu.spg.board.dto.response.CategoriesResponseDto;
+import com.cnu.spg.board.dto.response.BoardDetailResponse;
+import com.cnu.spg.board.dto.response.BoardResponse;
+import com.cnu.spg.board.dto.response.CategoriesResponse;
 import com.cnu.spg.board.exception.NotExistBoardTypeException;
 import com.cnu.spg.board.service.BoardAllService;
 import com.cnu.spg.board.service.ProjectService;
@@ -44,7 +44,7 @@ public class BoardApiController {
             @ApiImplicitParam(name = "elementSize", value = "each page element number", required = true, paramType = "query")
     })
     @GetMapping("/api/v1/boards")
-    public ResponseEntity<Page<BoardResponseDto>> getBoards(@Valid BoardsRequset boardsRequset) {
+    public ResponseEntity<Page<BoardResponse>> getBoards(@Valid BoardsRequset boardsRequset) {
         Pageable pageable = PageRequest.of(boardsRequset.getPageNum(), boardsRequset.getElementSize());
         BoardSearchCondition boardSearchCondition = new BoardSearchCondition(boardsRequset.getPartTitle(), boardsRequset.getWriterName(), boardsRequset.getPartOfContent());
 
@@ -53,7 +53,7 @@ public class BoardApiController {
 
     @ApiOperation("[권한] board type에 따른 정보 조회")
     @GetMapping("/api/v1/boards/{boardType}")
-    public ResponseEntity<Page<BoardResponseDto>> findBoardByType(@PathVariable String boardType, @Valid ProjectBoardRequset boardsRequset) {
+    public ResponseEntity<Page<BoardResponse>> findBoardByType(@PathVariable String boardType, @Valid BoardTypeRequset boardsRequset) {
         BoardType boardTypeEnum = BoardType.findBoardTypeByKey(boardType)
                 .orElseThrow(NotExistBoardTypeException::new);
 
@@ -73,7 +73,7 @@ public class BoardApiController {
             @ApiImplicitParam(name = "id", value = "board id 정보", readOnly = true, paramType = "path")
     })
     @GetMapping("/api/v1/boards/{boardType}/{id}")
-    public ResponseEntity<? extends BoardDetailResponseDto> getBoard(@PathVariable String boardType, @PathVariable("id") Long boardId) {
+    public ResponseEntity<? extends BoardDetailResponse> getBoard(@PathVariable String boardType, @PathVariable("id") Long boardId) {
         BoardType boardTypeEnum = BoardType.findBoardTypeByKey(boardType)
                 .orElseThrow(NotExistBoardTypeException::new);
         return ResponseEntity.ok().body(boardAllService.getBoard(boardTypeEnum, boardId));
@@ -81,7 +81,7 @@ public class BoardApiController {
 
     @ApiOperation("[권한] project board를 위한 category 정보 가져오기")
     @GetMapping("/api/v1/boards/categories")
-    public ResponseEntity<CategoriesResponseDto> getAllJoinedCategories(@UserId User user) {
+    public ResponseEntity<CategoriesResponse> getAllJoinedCategories(@UserId User user) {
         return ResponseEntity.ok(projectService.findAllUserCategories(user.getId()));
     }
 
