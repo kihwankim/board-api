@@ -3,14 +3,14 @@ package com.cnu.spg.board.service;
 import com.cnu.spg.board.domain.Board;
 import com.cnu.spg.board.domain.project.ProjectCategory;
 import com.cnu.spg.board.dto.condition.ProjectBoardCondition;
+import com.cnu.spg.board.dto.reponse.CommentCountsWithBoardIdDto;
 import com.cnu.spg.board.dto.response.BoardResponse;
 import com.cnu.spg.board.dto.response.CategoriesResponse;
-import com.cnu.spg.board.dto.reponse.CommentCountsWithBoardIdDto;
 import com.cnu.spg.board.dto.response.ProjectCategoryElement;
+import com.cnu.spg.board.exception.CategoryNotFoundException;
 import com.cnu.spg.board.repository.BoardRepository;
 import com.cnu.spg.board.repository.CommentRepository;
 import com.cnu.spg.board.repository.project.ProjectCategoryRepository;
-import com.cnu.spg.comon.exception.NotFoundException;
 import com.cnu.spg.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -81,7 +81,7 @@ public class ProjectService {
         ProjectCategory parentCategory = null;
         if (parentCategoryId != null) {
             parentCategory = projectCategoryRepository.findById(parentCategoryId)
-                    .orElseThrow(() -> new NotFoundException("부모 category가 없습니다"));
+                    .orElseThrow(CategoryNotFoundException::new);
         }
 
         ProjectCategory createdCategory = ProjectCategory.builder()
@@ -97,7 +97,7 @@ public class ProjectService {
 
     public Page<BoardResponse> findProjectBoardsOnePage(ProjectBoardCondition projectBoardCondition, Pageable pageable, Long categoryId) {
         ProjectCategory category = projectCategoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NotFoundException("Category is not exist"));
+                .orElseThrow(CategoryNotFoundException::new);
         List<Long> ids = boardRepository.findProjectBoardIdsFromPaginationWithKeyword(projectBoardCondition, category, pageable);
         List<CommentCountsWithBoardIdDto> countListAndBoardIdBulk = commentRepository.findCountListAndBoardIdBulk(ids);
 
