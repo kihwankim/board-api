@@ -1,4 +1,4 @@
-package com.cnu.spg.config;
+package com.cnu.spg.config.querydsl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
