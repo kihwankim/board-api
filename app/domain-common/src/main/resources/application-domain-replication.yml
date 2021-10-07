@@ -1,0 +1,27 @@
+spring:
+  config:
+    activate:
+      on-profile: replication
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: create-drop
+      use-new-id-generator-mappings: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
+        dialect.storage_engine: innodb
+        default_batch_fetch_size: 500
+        format_sql: true
+    open-in-view: false
+  datasource:
+    master:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3307/replication?serverTimezone=UTC
+      username: master_usr
+      password: root
+    slave:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3308/replication?serverTimezone=UTC
+      username: slave_usr
+      password: root
