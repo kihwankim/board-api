@@ -1,0 +1,8 @@
+# local 환경
+server:
+  port: 8000
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
