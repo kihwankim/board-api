@@ -1,6 +1,5 @@
 package com.cnu.spg.user.advice;
 
-import com.cnu.spg.comon.exception.NotFoundException;
 import com.cnu.spg.user.exception.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,7 @@ public class UserAdviceController {
      * board 정보를 받을 수 없음
      */
     @ExceptionHandler({RoleNotFoundException.class, UserNotFoundException.class})
-    protected ResponseEntity<String> handleNotFoundException(final NotFoundException exception) {
+    protected ResponseEntity<String> handleNotFoundException(final RuntimeException exception) {
         log.error(exception.getMessage(), exception);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
