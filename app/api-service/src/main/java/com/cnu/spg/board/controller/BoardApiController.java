@@ -3,8 +3,8 @@ package com.cnu.spg.board.controller;
 import com.cnu.spg.board.domain.BoardType;
 import com.cnu.spg.board.dto.condition.BoardSearchCondition;
 import com.cnu.spg.board.dto.condition.ProjectBoardCondition;
-import com.cnu.spg.board.dto.request.BoardsRequset;
 import com.cnu.spg.board.dto.request.BoardTypeRequset;
+import com.cnu.spg.board.dto.request.BoardsRequset;
 import com.cnu.spg.board.dto.request.ProjectCategoryRequestDto;
 import com.cnu.spg.board.dto.response.BoardDetailResponse;
 import com.cnu.spg.board.dto.response.BoardResponse;
@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -44,8 +45,7 @@ public class BoardApiController {
             @ApiImplicitParam(name = "elementSize", value = "each page element number", required = true, paramType = "query")
     })
     @GetMapping("/api/v1/boards")
-    public ResponseEntity<Page<BoardResponse>> getBoards(@Valid BoardsRequset boardsRequset) {
-        Pageable pageable = PageRequest.of(boardsRequset.getPageNum(), boardsRequset.getElementSize());
+    public ResponseEntity<Page<BoardResponse>> getBoards(@Valid BoardsRequset boardsRequset,  Pageable pageable) {
         BoardSearchCondition boardSearchCondition = new BoardSearchCondition(boardsRequset.getPartTitle(), boardsRequset.getWriterName(), boardsRequset.getPartOfContent());
 
         return ResponseEntity.ok().body(boardAllService.findBoardsOnePage(boardSearchCondition, pageable));

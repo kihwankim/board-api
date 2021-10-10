@@ -13,13 +13,11 @@ import com.cnu.spg.board.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -43,17 +41,14 @@ public class BoardAllService {
 
         Page<Board> pageDataFromBoardByIds = boardRepository.findPageDataFromBoardByIds(ids, boardSearchCondition, pageable);
 
-        List<BoardResponse> boardResponses = new ArrayList<>();
-        pageDataFromBoardByIds.getContent().forEach(board -> boardResponses.add(BoardResponse.builder()
+        return pageDataFromBoardByIds.map(board -> BoardResponse.builder()
                 .id(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
                 .writerId(board.getWriterId())
                 .writerName(board.getWriterName())
                 .commentCount(commentCountFromCommentDto(boardIdWithCommentNumber.get(board.getId())))
-                .build()));
-
-        return new PageImpl<>(boardResponses, pageable, pageDataFromBoardByIds.getTotalElements());
+                .build());
     }
 
     private long commentCountFromCommentDto(CommentCountsWithBoardIdDto commentCountsWithBoardIdDto) {
