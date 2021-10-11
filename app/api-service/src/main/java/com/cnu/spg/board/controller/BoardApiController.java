@@ -9,6 +9,7 @@ import com.cnu.spg.board.dto.request.ProjectCategoryRequestDto;
 import com.cnu.spg.board.dto.response.BoardDetailResponse;
 import com.cnu.spg.board.dto.response.BoardResponse;
 import com.cnu.spg.board.dto.response.CategoriesResponse;
+import com.cnu.spg.board.exception.BoardTypeNotMatchException;
 import com.cnu.spg.board.exception.NotExistBoardTypeException;
 import com.cnu.spg.board.service.BoardAllService;
 import com.cnu.spg.board.service.ProjectService;
@@ -64,7 +65,7 @@ public class BoardApiController {
             return ResponseEntity.ok().body(projectService.findProjectBoardsOnePage(projectBoardCondition, pageable, boardsRequset.getCategoryId()));
         }
 
-        throw new IllegalArgumentException();
+        throw new BoardTypeNotMatchException();
     }
 
 
