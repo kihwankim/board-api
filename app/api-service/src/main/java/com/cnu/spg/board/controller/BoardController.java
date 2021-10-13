@@ -5,15 +5,11 @@ import com.cnu.spg.board.dto.condition.BoardSearchCondition;
 import com.cnu.spg.board.dto.condition.ProjectBoardCondition;
 import com.cnu.spg.board.dto.request.BoardTypeRequset;
 import com.cnu.spg.board.dto.request.BoardsRequset;
-import com.cnu.spg.board.dto.request.ProjectCategoryRequestDto;
 import com.cnu.spg.board.dto.response.BoardDetailResponse;
 import com.cnu.spg.board.dto.response.BoardResponse;
-import com.cnu.spg.board.dto.response.CategoriesResponse;
 import com.cnu.spg.board.exception.NotExistBoardTypeException;
 import com.cnu.spg.board.service.BoardAllService;
 import com.cnu.spg.board.service.ProjectService;
-import com.cnu.spg.config.resolver.UserId;
-import com.cnu.spg.user.domain.User;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -25,15 +21,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class BoardApiController {
+public class BoardController {
 
     private final BoardAllService boardAllService;
     private final ProjectService projectService;
@@ -78,20 +72,5 @@ public class BoardApiController {
         BoardType boardTypeEnum = BoardType.findBoardTypeByKey(boardType)
                 .orElseThrow(NotExistBoardTypeException::new);
         return ResponseEntity.ok().body(boardAllService.getBoard(boardTypeEnum, boardId));
-    }
-
-    @ApiOperation("[권한] project board를 위한 category 정보 가져오기")
-    @GetMapping("/api/v1/boards/categories")
-    public ResponseEntity<CategoriesResponse> getAllJoinedCategories(@UserId User user) {
-        return ResponseEntity.ok(projectService.findAllUserCategories(user.getId()));
-    }
-
-    @ApiOperation("[권한] project category 추가")
-    @PostMapping("/api/v1/boards/categories")
-    public ResponseEntity<URI> createCategory(@UserId User user, @Valid @RequestBody ProjectCategoryRequestDto projectCategoryRequestDto) {
-        Long savedId = projectService.createProjectCategory(user, projectCategoryRequestDto.getCategoryName(), projectCategoryRequestDto.getParentCategoryId());
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(savedId).toUri();
-
-        return ResponseEntity.created(uri).build();
     }
 }
