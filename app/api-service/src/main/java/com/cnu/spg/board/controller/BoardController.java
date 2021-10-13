@@ -5,11 +5,15 @@ import com.cnu.spg.board.dto.condition.BoardSearchCondition;
 import com.cnu.spg.board.dto.condition.ProjectBoardCondition;
 import com.cnu.spg.board.dto.request.BoardTypeRequset;
 import com.cnu.spg.board.dto.request.BoardsRequset;
+import com.cnu.spg.board.dto.request.CommentRequest;
 import com.cnu.spg.board.dto.response.BoardDetailResponse;
 import com.cnu.spg.board.dto.response.BoardResponse;
 import com.cnu.spg.board.exception.NotExistBoardTypeException;
 import com.cnu.spg.board.service.BoardAllService;
+import com.cnu.spg.board.service.CommentService;
 import com.cnu.spg.board.service.ProjectService;
+import com.cnu.spg.config.resolver.UserId;
+import com.cnu.spg.user.domain.User;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -21,8 +25,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @Slf4j
 @RestController
@@ -31,6 +37,7 @@ public class BoardController {
 
     private final BoardAllService boardAllService;
     private final ProjectService projectService;
+    private final CommentService commentService;
 
     @ApiOperation("[권한] 전체 게시판 정보를 제공")
     @ApiImplicitParams({
@@ -72,5 +79,16 @@ public class BoardController {
         BoardType boardTypeEnum = BoardType.findBoardTypeByKey(boardType)
                 .orElseThrow(NotExistBoardTypeException::new);
         return ResponseEntity.ok().body(boardAllService.getBoard(boardTypeEnum, boardId));
+    }
+
+
+    @PostMapping("/api/v1/boards/comment")
+    public ResponseEntity<URI> createComment(@Valid @RequestBody CommentRequest commentRequest, @UserId User user) {
+        URI commentUri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(commentService.saveNewComment(commentRequest, user))
+                .toUri();
+
+        return ResponseEntity.created(commentUri).build();
     }
 }
