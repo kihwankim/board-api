@@ -8,6 +8,7 @@ import com.cnu.spg.board.dto.condition.BoardSearchCondition;
 import com.cnu.spg.board.dto.projection.BoardCommentCountProjection;
 import com.cnu.spg.board.dto.response.*;
 import com.cnu.spg.board.exception.BoardNotFoundException;
+import com.cnu.spg.board.exception.BoardTypeNotValidException;
 import com.cnu.spg.board.repository.BoardRepository;
 import com.cnu.spg.board.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -70,7 +70,7 @@ public class BoardAllService {
             return findProjectBoardElement((ProjectBoard) board, comments);
         }
 
-        throw new InvalidParameterException("board type exception");
+        throw new BoardTypeNotValidException();
     }
 
     private ProjectBoardResponse findProjectBoardElement(ProjectBoard projectBoard, List<CommentResponse> comments) {

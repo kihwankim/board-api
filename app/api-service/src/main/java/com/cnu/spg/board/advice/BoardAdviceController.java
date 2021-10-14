@@ -1,6 +1,7 @@
 package com.cnu.spg.board.advice;
 
 import com.cnu.spg.board.exception.BoardNotFoundException;
+import com.cnu.spg.board.exception.BoardTypeNotValidException;
 import com.cnu.spg.board.exception.CategoryNotFoundException;
 import com.cnu.spg.comon.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.security.InvalidParameterException;
 
 @Slf4j
 @RestControllerAdvice
@@ -31,8 +30,8 @@ public class BoardAdviceController {
      * 400 Bad Request
      * board type 정보 이슈
      */
-    @ExceptionHandler(InvalidParameterException.class)
-    protected ResponseEntity<String> handleInvalidBoardTypeException(final InvalidParameterException exception) {
+    @ExceptionHandler(BoardTypeNotValidException.class)
+    protected ResponseEntity<String> handleInvalidBoardTypeException(final BoardTypeNotValidException exception) {
         log.error(exception.getMessage(), exception);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
