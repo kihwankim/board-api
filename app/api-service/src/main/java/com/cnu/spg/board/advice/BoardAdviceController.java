@@ -4,7 +4,6 @@ import com.cnu.spg.board.exception.BoardNotFoundException;
 import com.cnu.spg.board.exception.BoardTypeNotValidException;
 import com.cnu.spg.board.exception.CategoryNotFoundException;
 import com.cnu.spg.comon.exception.NotFoundException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @RestControllerAdvice
-@RequiredArgsConstructor
 public class BoardAdviceController {
     /**
      * 404 Not Found
