@@ -8,7 +8,7 @@ import com.cnu.spg.board.dto.request.BoardsRequset;
 import com.cnu.spg.board.dto.request.CommentRequest;
 import com.cnu.spg.board.dto.response.BoardDetailResponse;
 import com.cnu.spg.board.dto.response.BoardResponse;
-import com.cnu.spg.board.exception.NotExistBoardTypeException;
+import com.cnu.spg.board.exception.BoardTypeNotValidException;
 import com.cnu.spg.board.service.BoardAllService;
 import com.cnu.spg.board.service.CommentService;
 import com.cnu.spg.board.service.ProjectService;
@@ -58,7 +58,7 @@ public class BoardController {
     public ResponseEntity<Page<BoardResponse>> findBoardByType(@PathVariable String boardType, @Valid BoardTypeRequset boardsRequset,
                                                                @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 20) Pageable pageable) {
         BoardType boardTypeEnum = BoardType.findBoardTypeByKey(boardType)
-                .orElseThrow(NotExistBoardTypeException::new);
+                .orElseThrow(BoardTypeNotValidException::new);
 
         ProjectBoardCondition projectBoardCondition = new ProjectBoardCondition(boardsRequset.getPartOfContent(), boardsRequset.getWriterName(), boardsRequset.getPartOfContent());
         if (boardTypeEnum == BoardType.PROJECT) {
@@ -77,7 +77,7 @@ public class BoardController {
     @GetMapping("/api/v1/boards/{boardType}/{id}")
     public ResponseEntity<? extends BoardDetailResponse> getBoard(@PathVariable String boardType, @PathVariable("id") Long boardId) {
         BoardType boardTypeEnum = BoardType.findBoardTypeByKey(boardType)
-                .orElseThrow(NotExistBoardTypeException::new);
+                .orElseThrow(BoardTypeNotValidException::new);
         return ResponseEntity.ok().body(boardAllService.getBoard(boardTypeEnum, boardId));
     }
 
