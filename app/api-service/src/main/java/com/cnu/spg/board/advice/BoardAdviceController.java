@@ -3,6 +3,7 @@ package com.cnu.spg.board.advice;
 import com.cnu.spg.board.exception.BoardNotFoundException;
 import com.cnu.spg.board.exception.BoardTypeNotValidException;
 import com.cnu.spg.board.exception.CategoryNotFoundException;
+import com.cnu.spg.board.exception.CategoryOmittedException;
 import com.cnu.spg.comon.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,10 +27,10 @@ public class BoardAdviceController {
 
     /**
      * 400 Bad Request
-     * board type 정보 이슈
+     * 사용자 요청 이슈
      */
-    @ExceptionHandler(BoardTypeNotValidException.class)
-    protected ResponseEntity<String> handleInvalidBoardTypeException(final BoardTypeNotValidException exception) {
+    @ExceptionHandler({BoardTypeNotValidException.class, CategoryOmittedException.class})
+    protected ResponseEntity<String> handleInvalidBoardTypeException(final RuntimeException exception) {
         log.error(exception.getMessage(), exception);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());

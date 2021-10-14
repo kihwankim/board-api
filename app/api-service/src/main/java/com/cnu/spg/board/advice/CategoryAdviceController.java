@@ -17,7 +17,7 @@ public class CategoryAdviceController {
      * board 정보를 받을 수 없음
      */
     @ExceptionHandler(CategoryNotFoundException.class)
-    protected ResponseEntity<String> handleCategoryNotFoundException(final NotFoundException exception) {
+    protected ResponseEntity<String> handleCategoryNotFoundExceptionHandler(final NotFoundException exception) {
         log.error(exception.getMessage(), exception);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
