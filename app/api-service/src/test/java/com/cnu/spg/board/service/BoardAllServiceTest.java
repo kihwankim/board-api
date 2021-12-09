@@ -4,11 +4,10 @@ import com.cnu.spg.board.domain.Board;
 import com.cnu.spg.board.domain.BoardType;
 import com.cnu.spg.board.domain.project.ProjectBoard;
 import com.cnu.spg.board.domain.project.ProjectCategory;
+import com.cnu.spg.board.dto.BoardDto;
 import com.cnu.spg.board.dto.condition.BoardSearchCondition;
 import com.cnu.spg.board.dto.response.BoardDetailResponse;
-import com.cnu.spg.board.dto.response.BoardResponse;
 import com.cnu.spg.board.exception.BoardNotFoundException;
-import com.cnu.spg.board.exception.BoardTypeNotValidException;
 import com.cnu.spg.board.repository.BoardRepository;
 import com.cnu.spg.board.repository.project.ProjectCategoryRepository;
 import com.cnu.spg.user.domain.User;
@@ -26,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-//import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
@@ -69,7 +67,7 @@ class BoardAllServiceTest {
         // when
         Pageable pageable = PageRequest.of(0, 20, Sort.by("id").descending());
         BoardSearchCondition boardSearchCondition = new BoardSearchCondition(null, null, null);
-        Page<BoardResponse> boardsOnePage = boardAllService.findBoardsOnePage(boardSearchCondition, pageable);
+        Page<BoardDto> boardsOnePage = boardAllService.findBoardsOnePage(boardSearchCondition, pageable);
 
         // then
         assertEquals(20, boardsOnePage.getContent().size());
@@ -91,7 +89,7 @@ class BoardAllServiceTest {
         // when
         Pageable pageable = PageRequest.of(0, 20, Sort.by("id").descending());
         BoardSearchCondition boardSearchCondition = new BoardSearchCondition(null, null, null);
-        Page<BoardResponse> boardsOnePage = boardAllService.findBoardsOnePage(boardSearchCondition, pageable);
+        Page<BoardDto> boardsOnePage = boardAllService.findBoardsOnePage(boardSearchCondition, pageable);
 
         // then
         assertEquals(11, boardsOnePage.getContent().size());
@@ -107,7 +105,7 @@ class BoardAllServiceTest {
         // when
         Pageable pageable = PageRequest.of(0, 20, Sort.by("id").descending());
         BoardSearchCondition boardSearchCondition = new BoardSearchCondition(null, null, null);
-        Page<BoardResponse> boardsOnePage = boardAllService.findBoardsOnePage(boardSearchCondition, pageable);
+        Page<BoardDto> boardsOnePage = boardAllService.findBoardsOnePage(boardSearchCondition, pageable);
 
         // then
         assertEquals(0, boardsOnePage.getContent().size());

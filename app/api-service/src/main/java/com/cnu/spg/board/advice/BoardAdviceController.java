@@ -4,7 +4,6 @@ import com.cnu.spg.board.exception.BoardNotFoundException;
 import com.cnu.spg.board.exception.BoardTypeNotValidException;
 import com.cnu.spg.board.exception.CategoryNotFoundException;
 import com.cnu.spg.board.exception.CategoryOmittedException;
-import com.cnu.spg.comon.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,7 @@ public class BoardAdviceController {
      * board 정보를 받을 수 없음
      */
     @ExceptionHandler({BoardNotFoundException.class, CategoryNotFoundException.class})
-    protected ResponseEntity<String> handleBoardNotFoundException(final NotFoundException exception) {
+    protected ResponseEntity<String> handleBoardNotFoundException(final RuntimeException exception) {
         log.error(exception.getMessage(), exception);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());

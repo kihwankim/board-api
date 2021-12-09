@@ -4,11 +4,15 @@ import com.cnu.spg.board.domain.Board;
 import com.cnu.spg.board.domain.BoardType;
 import com.cnu.spg.board.domain.project.ProjectBoard;
 import com.cnu.spg.board.domain.project.ProjectReference;
+import com.cnu.spg.board.dto.BoardCommentDto;
+import com.cnu.spg.board.dto.BoardDto;
+import com.cnu.spg.board.dto.ProjectUserReferenceDto;
 import com.cnu.spg.board.dto.condition.BoardSearchCondition;
 import com.cnu.spg.board.dto.projection.BoardCommentCountProjection;
-import com.cnu.spg.board.dto.response.*;
+import com.cnu.spg.board.dto.response.BoardDetailResponse;
+import com.cnu.spg.board.dto.response.ProjectBoardResponse;
 import com.cnu.spg.board.exception.BoardNotFoundException;
-import com.cnu.spg.board.exception.BoardTypeNotValidException;
+import com.cnu.spg.board.exception.BoardTypeNotMatchException;
 import com.cnu.spg.board.repository.BoardRepository;
 import com.cnu.spg.board.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +35,7 @@ public class BoardAllService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
 
-    public Page<BoardResponse> findBoardsOnePage(BoardSearchCondition boardSearchCondition, Pageable pageable) {
+    public Page<BoardDto> findBoardsOnePage(BoardSearchCondition boardSearchCondition, Pageable pageable) {
         List<Long> ids = boardRepository.findIdsFromPaginationWithKeyword(boardSearchCondition, pageable);
         List<BoardCommentCountProjection> countListAndBoardIdBulk = commentRepository.findCountListAndBoardIdBulk(ids);
 
@@ -41,7 +45,7 @@ public class BoardAllService {
 
         Page<Board> pageDataFromBoardByIds = boardRepository.findPageDataFromBoardByIds(ids, boardSearchCondition, pageable);
 
-        return pageDataFromBoardByIds.map(board -> BoardResponse.builder()
+        return pageDataFromBoardByIds.map(board -> BoardDto.builder()
                 .id(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
@@ -61,25 +65,25 @@ public class BoardAllService {
         Board board = boardRepository.findById(id)
                 .orElseThrow(BoardNotFoundException::new);
 
-        List<CommentResponse> comments = board.getComments()
+        List<BoardCommentDto> comments = board.getComments()
                 .stream()
-                .map(comment -> new CommentResponse(comment.getId(), comment.getWriterName(), comment.getContent()))
+                .map(comment -> new BoardCommentDto(comment.getId(), comment.getWriterName(), comment.getContent()))
                 .collect(Collectors.toList()); // N + 1 발생
 
         if (boardType == BoardType.PROJECT && board instanceof ProjectBoard) {
             return findProjectBoardElement((ProjectBoard) board, comments);
         }
 
-        throw new BoardTypeNotValidException();
+        throw new BoardTypeNotMatchException();
     }
 
-    private ProjectBoardResponse findProjectBoardElement(ProjectBoard projectBoard, List<CommentResponse> comments) {
+    private ProjectBoardResponse findProjectBoardElement(ProjectBoard projectBoard, List<BoardCommentDto> comments) {
         List<Long> referenceIds = projectBoard.getProjectReference().stream()
                 .map(projectReference -> projectBoard.getId())
                 .collect(Collectors.toList());
         List<ProjectReference> referencedUsersByIds = boardRepository.findReferencedUsersByIds(referenceIds);
-        List<ProjectRefResponse> referenceUserDtos = referencedUsersByIds.stream()
-                .map(projectReference -> new ProjectRefResponse(projectReference.getReferenceUser().getName()))
+        List<ProjectUserReferenceDto> referenceUserDtos = referencedUsersByIds.stream()
+                .map(projectReference -> new ProjectUserReferenceDto(projectReference.getReferenceUser().getName()))
                 .collect(Collectors.toList());
 
         return new ProjectBoardResponse(projectBoard, comments, referenceUserDtos);
